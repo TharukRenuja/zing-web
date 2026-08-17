@@ -15,7 +15,7 @@ jobs:
 
       - name: Fetch latest docs from source repo
         run: |
-          git clone --depth 1 --branch main \
+          git clone --depth 1 --branch v0.3.0 \
             https://github.com/TharukRenuja/zing.git /tmp/source
           rm -rf docs/content/
           mkdir -p docs/content
@@ -34,7 +34,7 @@ jobs:
             SHA=$(git -C /tmp/source rev-parse HEAD)
           fi
           git config user.name "zing-docs"
-          git config user.email "zing-docs@tharukrenuja.github.io"
+          git config user.email "docs@zing.tharuk.pro"
           git remote set-url origin \
             https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git
           git add -A
