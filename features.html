@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Features - zing download manager. Segmented downloads, adaptive connections, server probing, TUI, browser extension, and more.">
+  <title>Features - zing</title>
+  <meta property="og:title" content="Features - zing">
+  <meta property="og:description" content="Features of the zing download manager.">
+  <link rel="canonical" href="https://zing.tharuk.pro/features">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <script>
+    (function () {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+</head>
+<body>
+
+<!--NAV_START-->
+  <nav aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g clip-path="url(#navclip)">
+            <rect x="220.935" y="157" width="130.495" height="144.914" transform="rotate(24.4305 220.935 157)" fill="var(--accent)"/>
+            <path d="M225.366 184.462L252.513 215.691L175.768 282.404L274.323 323.227L247.177 291.998L323.922 225.285L225.366 184.462ZM34.2623 47.0682L425.538 208.62L323.484 297.334L465.427 460.621L74.1511 299.069L176.205 210.355L34.2623 47.0682Z" fill="var(--text)" shape-rendering="crispEdges"/>
+          </g>
+          <defs>
+            <clipPath id="navclip"><rect width="500" height="500" rx="80"/></clipPath>
+          </defs>
+        </svg>
+        zing
+      </a>
+      <div class="nav-right">
+        <ul class="nav-links">
+          <li><a href="/features" class="active">Features</a></li>
+          <li class="nav-docs"><a href="/docs/">Docs</a></li>
+          <li class="nav-docs-icon"><a href="/docs/" title="Docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></a></li>
+          <li><a href="/downloads">Downloads</a></li>
+          <li><a href="https://github.com/TharukRenuja/zing" rel="noopener noreferrer" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></a></li>
+        </ul>
+        <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+          <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none">
+            <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+<!--NAV_END-->
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="section-label">Features</div>
+        <h1>Everything you need.<br>Nothing you don't.</h1>
+        <p class="section-desc">
+          zing is a modern HTTP download manager built for speed, reliability, and developer experience.
+        </p>
+
+        <div class="feature-detail">
+          <div class="feature-detail-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="8" y1="2" x2="8" y2="22"/><line x1="16" y1="2" x2="16" y2="22"/></svg>
+          </div>
+          <div>
+            <h3>Segmented Concurrent Downloads</h3>
+            <p>Split any file into parallel byte-range segments, each downloaded by its own connection simultaneously. Finish large files in a fraction of the time.</p>
+            <ul>
+              <li>HTTP/1.1, HTTP/2, and HTTP/3 support via reqwest</li>
+              <li>Binary control files for crash-safe resume</li>
+              <li>Per-block hash validation with Metalink support</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="feature-detail">
+          <div class="feature-detail-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div>
+            <h3>Adaptive Connection Count</h3>
+            <p>No more guessing. zing measures real per-connection speed, then calculates the optimal number of connections based on your bandwidth and the server's capacity.</p>
+            <ul>
+              <li>Files under 200 MiB: single connection, zero overhead</li>
+              <li>Large files: 2-3 second measurement, then optimal count</li>
+              <li>Dynamic minimum segment size based on connection count</li>
+              <li>Work stealing redistributes from slow to fast connections</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="feature-detail">
+          <div class="feature-detail-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <div>
+            <h3>Server Intelligence Probing</h3>
+            <p>Before downloading, zing probes the server to detect protocol version, bandwidth, RTT, and range support. This intelligence drives every download decision.</p>
+            <ul>
+              <li>Auto-detects HTTP/1.1, HTTP/2, HTTP/3</li>
+              <li>Measures RTT and bandwidth for mirror ranking</li>
+              <li>Falls back to streaming for servers without range support</li>
+              <li>Mirror pre-probing by RTT for fastest failover</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="feature-detail">
+          <div class="feature-detail-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <div>
+            <h3>Resume &amp; Recovery</h3>
+            <p>State is saved to binary control files every 2 seconds. On resume, each bit is verified against the actual file on disk. Never re-download completed work.</p>
+            <ul>
+              <li>Binary control files with block bitfields</li>
+              <li>Periodic save + clean shutdown save</li>
+              <li>Automatic resume from daemon or CLI</li>
+              <li>Bitfield verification on resume</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="feature-detail">
+          <div class="feature-detail-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <div>
+            <h3>Terminal UI</h3>
+            <p>A beautiful, responsive TUI built with ratatui. Manage downloads, view per-connection speeds, see the block map, and read logs — all from the terminal.</p>
+            <ul>
+              <li>Task list with status, progress, speed, ETA</li>
+              <li>Per-connection detail view with live speed</li>
+              <li>Block map visualization (dots grid)</li>
+              <li>Log panel with color-coded levels</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="feature-detail">
+          <div class="feature-detail-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <div>
+            <h3>Desktop GUI</h3>
+            <p>A native Tauri v2 application with dark and light themes, drag &amp; drop, clipboard monitoring, and a polished interface for managing all your downloads.</p>
+            <ul>
+              <li>Dark/light theme with 7 accent color choices</li>
+              <li>Settings: Appearance, General, Network, Bandwidth, Downloads, Schedule, About</li>
+              <li>Add Download with category, speed limit, User-Agent, referer, proxy, and mirror URL</li>
+              <li>Confirm window: overwrite, download as, or cancel on file conflicts</li>
+              <li>Block map visualization, bottom info bar, and category sidebar</li>
+              <li>Post-download actions: shutdown, sleep, hibernate, or quit</li>
+            </ul>
+
+            <div class="ext-carousel" id="gui-carousel">
+              <div class="ext-carousel-inner">
+                <div class="ext-carousel-item"><img src="/assets/img/main-window.png" alt="zing Main Window"><div class="ext-carousel-caption">Main Window</div></div>
+                <div class="ext-carousel-item"><img src="/assets/img/settings-window.png" alt="zing Settings"><div class="ext-carousel-caption">Settings</div></div>
+                <div class="ext-carousel-item"><img src="/assets/img/new-download.png" alt="zing Add Download"><div class="ext-carousel-caption">Add Download</div></div>
+                <div class="ext-carousel-item"><img src="/assets/img/new-download-advanced.png" alt="zing Advanced Options"><div class="ext-carousel-caption">Advanced Options</div></div>
+                <div class="ext-carousel-item"><img src="/assets/img/downloads-settings.png" alt="zing Downloads Settings"><div class="ext-carousel-caption">Downloads Settings</div></div>
+                <div class="ext-carousel-item"><img src="/assets/img/schedule-settings.png" alt="zing Schedule Settings"><div class="ext-carousel-caption">Schedule Settings</div></div>
+                <div class="ext-carousel-item"><img src="/assets/img/update-settings.png" alt="zing Update Settings"><div class="ext-carousel-caption">Update Settings</div></div>
+              </div>
+              <div class="ext-carousel-controls">
+                <button class="ext-carousel-btn" data-dir="-1">&lsaquo;</button>
+                <div class="ext-carousel-dots"></div>
+                <button class="ext-carousel-btn" data-dir="1">&rsaquo;</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-detail">
+          <div class="feature-detail-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+          </div>
+          <div>
+            <h3>Browser Extension</h3>
+            <div class="ext-side-by-side">
+              <div class="ext-text">
+                <p>Capture downloads from Chrome and Firefox directly into zing via Native Messaging. Filter by file type or domain, and configure connections and speed limits right from the popup.</p>
+                <ul>
+                  <li>Chrome and Firefox support via Native Messaging</li>
+                  <li>File type and domain-based interception filters</li>
+                  <li>Configurable connections, concurrent tasks, and speed limits</li>
+                  <li>Stats dashboard: intercepted, ignored, and detected counts</li>
+                  <li>Default downloads directory and User-Agent configuration</li>
+                </ul>
+              </div>
+              <div class="ext-carousel" id="ext-carousel">
+                <div class="ext-carousel-inner">
+                  <div class="ext-carousel-item"><img src="/assets/img/extension-main.png" alt="zing Extension Main"><div class="ext-carousel-caption">Main View</div></div>
+                  <div class="ext-carousel-item"><img src="/assets/img/extension-filters.png" alt="zing Extension Filters"><div class="ext-carousel-caption">Filters</div></div>
+                  <div class="ext-carousel-item"><img src="/assets/img/extension-settings.png" alt="zing Extension Settings"><div class="ext-carousel-caption">Settings</div></div>
+                </div>
+                <div class="ext-carousel-controls">
+                  <button class="ext-carousel-btn" data-dir="-1">&lsaquo;</button>
+                  <div class="ext-carousel-dots"></div>
+                  <button class="ext-carousel-btn" data-dir="1">&rsaquo;</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-detail">
+          <div class="feature-detail-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div>
+            <h3>Daemon Mode</h3>
+            <p>Run zing as a background daemon with JSON-RPC over Unix socket (Linux) or TCP (Windows). Manage downloads from TUI, GUI, CLI, or browser extension.</p>
+            <ul>
+              <li>JSON-RPC protocol with auth tokens</li>
+              <li>Session persistence across restarts</li>
+              <li>Scheduled downloads with bandwidth windows</li>
+              <li>Event streaming for real-time updates</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="feature-detail">
+          <div class="feature-detail-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <h3>Retry &amp; Mirror Fallback</h3>
+            <p>Failed connections retry with exponential backoff + jitter. After exhausting retries, zing rotates to the next mirror. Metalink files provide automatic mirror discovery.</p>
+            <ul>
+              <li>Exponential backoff with jitter (500ms - 10s)</li>
+              <li>Multi-URL mirror fallback</li>
+              <li>Throttle detection → reprobe → failover</li>
+              <li>Metalink per-block hash validation</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+<!--FOOTER_START-->
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 zing &middot; <a href="https://github.com/TharukRenuja/zing/blob/main/LICENSE" rel="noopener noreferrer">AGPL-3.0</a> &middot; <a href="https://www.rust-lang.org" rel="noopener noreferrer">Built with Rust</a></p>
+    </div>
+  </footer>
+<!--FOOTER_END-->
+
+  <script>
+    (() => {
+      // Theme toggle
+      const themeToggle = document.getElementById('theme-toggle');
+      if (themeToggle) {
+        const sunIcon = themeToggle.querySelector('.sun-icon');
+        const moonIcon = themeToggle.querySelector('.moon-icon');
+        const mq = window.matchMedia('(prefers-color-scheme: light)');
+        function updateIcons(t) {
+          if (t === 'light') { sunIcon.style.display = 'none'; moonIcon.style.display = 'block'; }
+          else { sunIcon.style.display = 'block'; moonIcon.style.display = 'none'; }
+        }
+        function getTheme() { return localStorage.getItem('theme') || (mq.matches ? 'light' : 'dark'); }
+        function applyTheme(t) { document.documentElement.setAttribute('data-theme', t); updateIcons(t); }
+        applyTheme(getTheme());
+        mq.addEventListener('change', e => { if (!localStorage.getItem('theme')) applyTheme(e.matches ? 'light' : 'dark'); });
+        themeToggle.addEventListener('click', () => {
+          const next = getTheme() === 'dark' ? 'light' : 'dark';
+          localStorage.setItem('theme', next); applyTheme(next);
+        });
+      }
+
+      // Screenshot carousels (GUI + Extension)
+      let hoveredCarousel = null;
+      document.querySelectorAll('.ext-carousel').forEach(carousel => {
+        const inner = carousel.querySelector('.ext-carousel-inner');
+        const items = carousel.querySelectorAll('.ext-carousel-item');
+        const dotsWrap = carousel.querySelector('.ext-carousel-dots');
+        const btns = carousel.querySelectorAll('.ext-carousel-btn');
+        const total = items.length;
+        let current = 0;
+        let programmatic = false;
+
+        // Build dots
+        items.forEach((_, i) => {
+          const dot = document.createElement('div');
+          dot.className = 'ext-carousel-dot' + (i === 0 ? ' active' : '');
+          dot.addEventListener('click', () => goTo(i));
+          dotsWrap.appendChild(dot);
+        });
+
+        const dots = dotsWrap.querySelectorAll('.ext-carousel-dot');
+
+        function updateDots(idx) {
+          dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+        }
+
+        function goTo(idx) {
+          if (total === 0) return;
+          current = ((idx % total) + total) % total;
+          programmatic = true;
+          updateDots(current);
+          inner.scrollTo({ left: items[current].offsetLeft - (inner.clientWidth - items[current].offsetWidth) / 2, behavior: 'smooth' });
+          setTimeout(() => { programmatic = false; }, 400);
+        }
+
+        btns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const dir = parseInt(btn.dataset.dir);
+            goTo(current + dir);
+          });
+        });
+
+        // Track hover for arrow key scope
+        carousel.addEventListener('mouseenter', () => { hoveredCarousel = carousel; });
+        carousel.addEventListener('mouseleave', () => { if (hoveredCarousel === carousel) hoveredCarousel = null; });
+
+        // Update dots on manual scroll only
+        inner.addEventListener('scroll', () => {
+          if (programmatic) return;
+          const scrollLeft = inner.scrollLeft;
+          const mid = scrollLeft + inner.clientWidth / 2;
+          let closest = 0, closestDist = Infinity;
+          items.forEach((item, i) => {
+            const dist = Math.abs((item.offsetLeft + item.offsetWidth / 2) - mid);
+            if (dist < closestDist) { closestDist = dist; closest = i; }
+          });
+          if (closest !== current) {
+            current = closest;
+            updateDots(current);
+          }
+        });
+      });
+
+      // Arrow key navigation — scoped to hovered carousel
+      document.addEventListener('keydown', e => {
+        if (!hoveredCarousel) return;
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+          e.preventDefault();
+          const inner = hoveredCarousel.querySelector('.ext-carousel-inner');
+          const items = hoveredCarousel.querySelectorAll('.ext-carousel-item');
+          const dots = hoveredCarousel.querySelectorAll('.ext-carousel-dot');
+          const total = items.length;
+          const scrollLeft = inner.scrollLeft;
+          const mid = scrollLeft + inner.clientWidth / 2;
+          let current = 0, closestDist = Infinity;
+          items.forEach((item, i) => {
+            const dist = Math.abs((item.offsetLeft + item.offsetWidth / 2) - mid);
+            if (dist < closestDist) { closestDist = dist; current = i; }
+          });
+          const dir = e.key === 'ArrowLeft' ? -1 : 1;
+          const next = ((current + dir) % total + total) % total;
+          inner.scrollTo({ left: items[next].offsetLeft - (inner.clientWidth - items[next].offsetWidth) / 2, behavior: 'smooth' });
+          dots.forEach((d, i) => d.classList.toggle('active', i === next));
+        }
+      });
+
+      // Capture wheel on hovered carousel → scroll images instead of page
+      document.addEventListener('wheel', e => {
+        const target = e.target.closest('.ext-carousel');
+        if (!target) return;
+        e.preventDefault();
+        const inner = target.querySelector('.ext-carousel-inner');
+        const items = target.querySelectorAll('.ext-carousel-item');
+        const dots = target.querySelectorAll('.ext-carousel-dot');
+        const total = items.length;
+        if (total === 0) return;
+        const scrollLeft = inner.scrollLeft;
+        const mid = scrollLeft + inner.clientWidth / 2;
+        let current = 0, closestDist = Infinity;
+        items.forEach((item, i) => {
+          const dist = Math.abs((item.offsetLeft + item.offsetWidth / 2) - mid);
+          if (dist < closestDist) { closestDist = dist; current = i; }
+        });
+        const dir = e.deltaY > 0 ? 1 : -1;
+        const next = ((current + dir) % total + total) % total;
+        inner.scrollTo({ left: items[next].offsetLeft - (inner.clientWidth - items[next].offsetWidth) / 2, behavior: 'smooth' });
+        dots.forEach((d, i) => d.classList.toggle('active', i === next));
+      }, { passive: false });
+    })();
+  </script>
+</body>
+</html>

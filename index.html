@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="zing - a modern HTTP download manager with segmented concurrent downloads, adaptive connections, server probing, TUI, desktop GUI, and browser extension.">
+  <title>zing - Download faster.</title>
+  <meta property="og:title" content="zing - Download faster.">
+  <meta property="og:description" content="A modern HTTP download manager with segmented concurrent downloads, adaptive connections, server probing, TUI, desktop GUI, and browser extension.">
+  <meta property="og:url" content="https://zing.tharuk.pro">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="zing - Download faster.">
+  <meta name="twitter:description" content="A modern HTTP download manager with segmented concurrent downloads, adaptive connections, server probing, and a built-in TUI.">
+  <link rel="canonical" href="https://zing.tharuk.pro">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <script>
+    (function () {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+</head>
+<body>
+
+<!--NAV_START-->
+  <nav aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g clip-path="url(#navclip)">
+            <rect x="220.935" y="157" width="130.495" height="144.914" transform="rotate(24.4305 220.935 157)" fill="var(--accent)"/>
+            <path d="M225.366 184.462L252.513 215.691L175.768 282.404L274.323 323.227L247.177 291.998L323.922 225.285L225.366 184.462ZM34.2623 47.0682L425.538 208.62L323.484 297.334L465.427 460.621L74.1511 299.069L176.205 210.355L34.2623 47.0682Z" fill="var(--text)" shape-rendering="crispEdges"/>
+          </g>
+          <defs>
+            <clipPath id="navclip"><rect width="500" height="500" rx="80"/></clipPath>
+          </defs>
+        </svg>
+        zing
+      </a>
+      <div class="nav-right">
+        <ul class="nav-links">
+          <li><a href="/features">Features</a></li>
+          <li class="nav-docs"><a href="/docs/">Docs</a></li>
+          <li class="nav-docs-icon"><a href="/docs/" title="Docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></a></li>
+          <li><a href="/downloads">Downloads</a></li>
+          <li><a href="https://github.com/TharukRenuja/zing" rel="noopener noreferrer" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></a></li>
+        </ul>
+        <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+          <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+<!--NAV_END-->
+
+  <main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge"><span class="dot"></span>v0.2.6 &middot; Open Source</div>
+        <h1>Download<br>faster.</h1>
+        <p class="hero-desc">
+          A modern HTTP download manager with segmented concurrent downloads,
+          adaptive connections, server probing, and a built-in multi UI options.
+        </p>
+        <div class="hero-cta">
+          <a href="/downloads" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download
+          </a>
+          <a href="https://github.com/TharukRenuja/zing" class="btn btn-secondary" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+      <div class="terminal" id="hero-terminal">
+        <div class="terminal-bar">
+          <div class="terminal-dot terminal-dot-r"></div>
+          <div class="terminal-dot terminal-dot-y"></div>
+          <div class="terminal-dot terminal-dot-g"></div>
+          <span class="terminal-title">zing</span>
+        </div>
+        <div class="terminal-body tui-body" id="terminal-body">
+          <div class="tui-line tui-title"><span class="t-blue">zing</span> <span class="t-white">1 tasks</span> | <span class="t-green">1 running</span> | <span class="t-yellow">0 queued</span> | <span class="t-prompt">0 done</span> | <span class="t-blue">0 paused</span> | <span class="t-dim">downloaded</span> <span class="t-white">4.1 MB</span> | <span class="t-dim">speed</span> <span class="t-white">510.1 KB/s</span><span class="tui-logo">Z<span class="t-green">⚡</span>NG</span></div>
+          <div class="tui-line tui-file"><span class="t-dim">zing-v0.2.6-x86_64-mac.dmg</span> <span class="t-dim">(</span><span class="t-white">downloading</span><span class="t-dim">)</span></div>
+          <div class="tui-line"><span class="t-dim">Downloaded</span> <span class="t-white">4.1 MB</span> <span class="t-dim">/ Total</span> <span class="t-white">10.3 MB</span>     <span class="t-green">510.1 KB/s</span>     <span class="t-yellow">39%</span></div>
+          <div class="tui-line tui-progress-bar-row"><span class="tui-bar"></span><span class="t-green tui-pct"> 39%</span>     <span class="t-dim">4.1 MB / 10.3 MB</span>     <span class="t-white">510.1 KB/s</span></div>
+          <div class="tui-line tui-section-header"><span class="t-dim">Stats</span></div>
+          <div class="tui-line tui-stats"><span class="t-dim">Downloaded</span> <span class="t-white">4.1 MB</span>            <span class="t-dim">Total</span> <span class="t-white">10.3 MB</span>            <span class="t-dim">Speed</span> <span class="t-green">510.1 KB/s</span>            <span class="t-dim">Peak</span> <span class="t-white">1.4 MB/s</span></div>
+          <div class="tui-line tui-stats"><span class="t-dim">ETA</span> <span class="t-yellow">12s</span>                      <span class="t-dim">Blocks</span> <span class="t-white">77/165</span>            <span class="t-dim">In-flight</span> <span class="t-white">15</span>                <span class="t-dim">Endgame</span> <span class="t-dim">OFF</span></div>
+          <div class="tui-line tui-section-header"><span class="t-dim">Connections</span></div>
+          <div class="tui-line tui-table-header"><span class="t-blue">#     ADDR                         SPEED             BYTES            TIME          STATE</span></div>
+          <div class="tui-line tui-table-row"><span class="t-dim">0     </span><span class="t-white">185.199.110.112              </span><span class="t-green">62.7 KB/s         </span><span class="t-white">1.0 MB           </span><span class="t-dim">7s            </span><span class="t-green">• active</span></div>
+          <div class="tui-line tui-table-row"><span class="t-dim">1     </span><span class="t-white">185.199.110.134              </span><span class="t-green">-                 </span><span class="t-white">635.0 KB         </span><span class="t-dim">6s            </span><span class="t-yellow">• idle</span></div>
+          <div class="tui-line tui-table-row"><span class="t-dim">2     </span><span class="t-white">185.199.108.156              </span><span class="t-green">63.8 KB/s         </span><span class="t-white">319.1 KB         </span><span class="t-dim">6s            </span><span class="t-green">• active</span></div>
+          <div class="tui-line tui-keybar"><span class="tui-key">q</span><span class="t-dim"> quit    </span><span class="tui-key">j/k</span><span class="t-dim"> select    </span><span class="tui-key">p</span><span class="t-dim"> pause    </span><span class="tui-key">P</span><span class="t-dim"> pause all    </span><span class="tui-key">x</span><span class="t-dim"> stop    </span><span class="tui-key">r</span><span class="t-dim"> remove    </span><span class="tui-key">a</span><span class="t-dim"> add url      </span><span class="t-dim">Peak: </span><span class="t-white">1.4 MB/s</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-label">Features</div>
+      <h2>Built for speed.</h2>
+      <p class="section-desc">
+        Every feature is designed to maximize download speed while being
+        intelligent about server capabilities and network conditions.
+      </p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="8" y1="2" x2="8" y2="22"/><line x1="16" y1="2" x2="16" y2="22"/></svg>
+          </div>
+          <h3>Segmented Downloads</h3>
+          <p>Split files into parallel byte-range segments. Each connection downloads its own chunk simultaneously.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <h3>Adaptive Connections</h3>
+          <p>Measures real per-connection speed, then calculates the optimal connection count. No wasted overhead.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <h3>Server Probing</h3>
+          <p>Detects HTTP/2, HTTP/3, bandwidth, RTT, and range support before choosing the best download strategy.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <h3>Resume &amp; Recovery</h3>
+          <p>Automatic resume with binary control files. Verify each block against the file on disk.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+          </div>
+          <h3>Daemon Mode</h3>
+          <p>Background service with persistent queue. TUI connects as a live dashboard, CLI submits tasks remotely.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          </div>
+          <h3>Retry &amp; Mirror Fallback</h3>
+          <p>Automatic retry with exponential backoff. Failover to mirror URLs when a source becomes unavailable.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <h3>Terminal UI</h3>
+          <p>Beautiful TUI with task list, per-connection speed, block map visualization, and log panel.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+          </div>
+          <h3>Browser Extension</h3>
+          <p>Capture downloads from Chrome and Firefox directly into zing with Native Messaging.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <h3>Desktop GUI</h3>
+          <p>Native Tauri v2 app with dark/light themes, drag &amp; drop, clipboard monitoring, and category organization.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- INTERFACES -->
+  <section class="section">
+    <div class="container">
+      <div class="section-label">Interfaces</div>
+      <h2>Use it your way.</h2>
+      <p class="section-desc">CLI for power users, TUI for visibility, GUI for everyone, extension for convenience.</p>
+
+      <!-- CLI -->
+      <div class="interface-section">
+        <div class="interface-content">
+          <h3>Command-line power</h3>
+          <p>Pipe zing into scripts, automate downloads, and control every detail from the terminal.</p>
+          <ul>
+            <li>Single-command downloads with full flag control</li>
+            <li>Resume any interrupted download automatically</li>
+            <li>Metalink and batch URL support</li>
+            <li>Output formatting for scripting and parsing</li>
+          </ul>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;font-family:var(--mono);font-size:0.82rem;line-height:1.8;overflow:hidden;min-width:0;">
+          <div><span style="color:var(--muted)">$ </span><span style="color:var(--text)">zing download https://example.com/file.zip</span></div>
+          <div class="t-dim">Probing server...</div>
+          <div><span style="color:var(--green)">HTTP/2</span><span style="color:var(--muted)"> · 256 MiB · ranges supported</span></div>
+          <div class="t-dim">Adaptive: measured 12.4 MB/s → 8 connections</div>
+          <div><span style="color:var(--text)">████████████████████░░░░░░░░░░ </span><span style="color:var(--green)">73%</span><span style="color:var(--muted)">  45.2 MB/s  ETA 12s</span></div>
+        </div>
+      </div>
+
+      <!-- TUI -->
+      <div class="interface-section reverse">
+        <div class="interface-content">
+          <h3>Terminal dashboard</h3>
+          <p>A real-time view of all your downloads. See per-connection speeds, block maps, and logs without leaving the terminal.</p>
+          <ul>
+            <li>Task list with status, progress, speed, and ETA</li>
+            <li>Per-connection detail with live speed graphs</li>
+            <li>Block map visualization showing download progress</li>
+            <li>Color-coded log panel with filter levels</li>
+          </ul>
+        </div>
+        <div style="overflow:hidden;border-radius:12px;border:1px solid var(--border);min-width:0;">
+          <img src="/assets/img/zing-tui.png" alt="zing TUI" style="width:100%;display:block;">
+        </div>
+      </div>
+
+      <!-- GUI -->
+      <div class="interface-section">
+        <div class="interface-content">
+          <h3>Native desktop app</h3>
+          <p>A polished Tauri v2 application with dark and light themes, drag &amp; drop, clipboard monitoring, and a category-based sidebar.</p>
+          <ul>
+            <li>Dark/light theme with 7 accent color choices</li>
+            <li>Add Download with category, speed limit, and advanced options</li>
+            <li>Block map visualization and per-connection detail</li>
+            <li>Post-download actions: shutdown, sleep, hibernate, or quit</li>
+          </ul>
+        </div>
+        <div style="overflow:hidden;border-radius:12px;border:1px solid var(--border);min-width:0;">
+          <img src="/assets/img/main-window.png" alt="zing main window" style="width:100%;display:block;">
+        </div>
+      </div>
+
+      <!-- EXTENSION -->
+      <div class="interface-section reverse">
+        <div class="interface-content">
+          <h3>One-click capture</h3>
+          <p>Install the browser extension and every download automatically goes through zing. Filter by file type or domain.</p>
+          <ul>
+            <li>Chrome and Firefox via Native Messaging</li>
+            <li>File type and domain-based interception filters</li>
+            <li>Configurable connections, concurrent tasks, and speed limits</li>
+            <li>Stats dashboard with intercepted, ignored, and detected counts</li>
+          </ul>
+        </div>
+        <img src="/assets/img/extension-main.png" alt="zing Browser Extension" class="interface-screenshot" style="max-width:280px;margin:0 auto;">
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- COMPARISON -->
+  <section class="section">
+    <div class="container">
+      <div class="section-label">Comparison</div>
+      <h2>vs. Alternatives</h2>
+      <p class="section-desc">See how zing stacks up against other download tools.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Capability</th>
+              <th class="hl">zing</th>
+              <th>aria2</th>
+              <th>curl</th>
+              <th>wget2</th>
+              <th>gopeed</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>HTTP/1.1 + H2 + H3</td>
+              <td class="hl">Yes</td>
+              <td>H1.1</td>
+              <td>Yes</td>
+              <td>H1.1 + H2</td>
+              <td>H1.1 + H2</td>
+            </tr>
+            <tr>
+              <td>Segmented concurrent download</td>
+              <td class="hl">Adaptive</td>
+              <td>Static split</td>
+              <td>No</td>
+              <td>Partial</td>
+              <td>Static split</td>
+            </tr>
+            <tr>
+              <td>Adaptive connection count</td>
+              <td class="hl">Yes</td>
+              <td>No</td>
+              <td>No</td>
+              <td>No</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td>Server intelligence probe</td>
+              <td class="hl">Yes</td>
+              <td>No</td>
+              <td>No</td>
+              <td>No</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td>Throttle detection → re-probe</td>
+              <td class="hl">Yes</td>
+              <td>No</td>
+              <td>No</td>
+              <td>No</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td>Rate limiting</td>
+              <td class="hl">Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Resume</td>
+              <td class="hl">Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Built-in TUI</td>
+              <td class="hl">Yes</td>
+              <td>No</td>
+              <td>No</td>
+              <td>No</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td>Browser extension</td>
+              <td class="hl">Yes</td>
+              <td>No</td>
+              <td>No</td>
+              <td>No</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Metalink support</td>
+              <td class="hl">Yes</td>
+              <td>Yes</td>
+              <td>No</td>
+              <td>Yes</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td>Daemon mode</td>
+              <td class="hl">Yes</td>
+              <td>Yes</td>
+              <td>No</td>
+              <td>No</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Desktop GUI</td>
+              <td class="hl">Yes</td>
+              <td>No</td>
+              <td>No</td>
+              <td>No</td>
+              <td>Yes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="section-label">Get started</div>
+      <h2>Ready to download faster?</h2>
+      <p class="section-desc">
+        Free, open source, and available on Linux, macOS, and Windows.
+      </p>
+      <div class="cta-btns">
+        <a href="/downloads" class="btn btn-accent">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </a>
+        <a href="https://github.com/TharukRenuja/zing" class="btn btn-secondary" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+<!--FOOTER_START-->
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 zing &middot; <a href="https://github.com/TharukRenuja/zing/blob/main/LICENSE" rel="noopener noreferrer">AGPL-3.0</a> &middot; <a href="https://www.rust-lang.org" rel="noopener noreferrer">Built with Rust</a></p>
+    </div>
+  </footer>
+<!--FOOTER_END-->
+
+  <script>
+    (() => {
+      // Terminal animation
+      const terminalBody = document.getElementById("terminal-body");
+      if (terminalBody) {
+        const allLines = Array.from(terminalBody.children).filter(c => c.tagName === "DIV");
+        if (allLines.length > 0) {
+          const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+          if (prefersReducedMotion) {
+            allLines.forEach(l => l.classList.add("is-visible"));
+          } else {
+            let timers = [];
+            function clearTimers() { timers.forEach(t => clearTimeout(t)); timers = []; }
+            function hideAll() { allLines.forEach(l => l.classList.remove("is-visible")); }
+
+            function animate() {
+              clearTimers(); hideAll();
+              const tuiLines = allLines;
+              let delay = 0;
+              tuiLines.forEach((l, i) => {
+                timers.push(setTimeout(() => l.classList.add("is-visible"), delay));
+                delay += 80;
+              });
+              // Loop
+              timers.push(setTimeout(() => {
+                hideAll();
+                timers.push(setTimeout(animate, 600));
+              }, delay + 5000));
+            }
+            animate();
+          }
+        }
+      }
+
+      // Theme toggle
+      const themeToggle = document.getElementById('theme-toggle');
+      if (themeToggle) {
+        const sunIcon = themeToggle.querySelector('.sun-icon');
+        const moonIcon = themeToggle.querySelector('.moon-icon');
+        const mq = window.matchMedia('(prefers-color-scheme: light)');
+        function updateIcons(t) {
+          if (t === 'light') { sunIcon.style.display = 'none'; moonIcon.style.display = 'block'; }
+          else { sunIcon.style.display = 'block'; moonIcon.style.display = 'none'; }
+        }
+        function getTheme() { return localStorage.getItem('theme') || (mq.matches ? 'light' : 'dark'); }
+        function applyTheme(t) {
+          document.documentElement.setAttribute('data-theme', t);
+          updateIcons(t);
+        }
+        applyTheme(getTheme());
+        mq.addEventListener('change', e => { if (!localStorage.getItem('theme')) applyTheme(e.matches ? 'light' : 'dark'); });
+        themeToggle.addEventListener('click', () => {
+          const next = getTheme() === 'dark' ? 'light' : 'dark';
+          localStorage.setItem('theme', next);
+          applyTheme(next);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

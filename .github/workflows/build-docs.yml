@@ -1,0 +1,43 @@
+name: Build Docs
+
+on:
+  repository_dispatch:
+    types: [docs-updated]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch latest docs from source repo
+        run: |
+          git clone --depth 1 --branch main \
+            https://github.com/TharukRenuja/zing.git /tmp/source
+          rm -rf docs/content/
+          mkdir -p docs/content
+          cp -r /tmp/source/docs/content/. docs/content/
+
+      - name: Build HTML
+        run: python3 .github/scripts/build-docs.py
+
+      - name: Clean up source markdown
+        run: rm -rf docs/content/
+
+      - name: Commit and push
+        run: |
+          SHA="${{ github.event.client_payload.sha }}"
+          if [ -z "$SHA" ]; then
+            SHA=$(git -C /tmp/source rev-parse HEAD)
+          fi
+          git config user.name "zing-docs"
+          git config user.email "zing-docs@tharukrenuja.github.io"
+          git remote set-url origin \
+            https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git
+          git add -A
+          git diff --cached --quiet || \
+            git commit -m "docs: update from source@${SHA:0:7}" && \
+            git push
