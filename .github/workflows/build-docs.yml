@@ -17,16 +17,19 @@ jobs:
       - name: Checkout zing-web
         uses: actions/checkout@v4
 
-      - name: Clone docs from zing v0.3.0
+      - name: Clone docs from zing
         run: |
           git clone --depth 1 --branch v0.3.0 \
             https://github.com/TharukRenuja/zing.git /tmp/source
+          rm -rf docs/content/
+          mkdir -p docs/content
+          cp -r /tmp/source/docs/. docs/content/
 
-      - name: Copy docs
-        run: |
-          rm -rf docs
-          mkdir -p docs
-          cp -r /tmp/source/docs/. docs/
+      - name: Build HTML
+        run: python3 .github/scripts/build-docs.py
+
+      - name: Clean up source markdown
+        run: rm -rf docs/content/
 
       - name: Commit and push changes
         run: |

@@ -44,7 +44,7 @@ def consume_code(lines, i):
         else:
             buf.append(lines[i] + '\n')
         i += 1
-    return f'<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button><pre><code>{"".join(buf)}</code></pre></div>', i
+    return f'<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{"".join(buf)}</code></pre></div>', i
 
 def md_to_html(md):
     lines = md.split('\n')
@@ -426,6 +426,7 @@ def make_page(title, body, slug, nav_template, footer_template, pages, is_index=
   <link rel="icon" href="/assets/favicon.ico">
   <link rel="apple-touch-icon" href="/assets/favicon.ico">
   <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     .docs-layout {{
       display: flex; min-height: calc(100vh - 56px);
@@ -971,7 +972,7 @@ def build_downloads_page(root, nav_template, footer_template):
       <h2>Compile zing yourself</h2>
       <p class="section-desc">Requires Rust 1.75+ and Cargo. Clone the repo and build in release mode.</p>
       <div class="code-block">
-        <button class="copy-btn" onclick="copyCode(this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
+        <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button>
         <pre><code>git clone https://github.com/TharukRenuja/zing.git
 cd zing
 cargo build --release</code></pre>
