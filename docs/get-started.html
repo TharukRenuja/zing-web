@@ -3,24 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Install zing from source, pre-built binaries, or the install script. Set up systemd service on Linux.">
-  <meta name="keywords" content="zing, install, build, cargo, binary, systemd, setup, download, linux, macos, windows">
-  <title>Installation - zing Docs</title>
-  <meta property="og:title" content="Installation - zing Docs">
-  <meta property="og:description" content="Install zing from source, pre-built binaries, or the install script. Set up systemd service on Linux.">
-  <meta property="og:url" content="https://zing.tharuk.pro/docs/installation.html">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Installation - zing Docs">
-  <meta name="twitter:description" content="Install zing from source, pre-built binaries, or the install script. Set up systemd service on Linux.">
-  <link rel="canonical" href="https://zing.tharuk.pro/docs/installation.html">
+  <meta name="description" content="Get started with zing — install in one command and start downloading.">
+  <title>Get Started - zing Docs</title>
+  <meta property="og:title" content="Get Started - zing Docs">
+  <meta property="og:description" content="Get started with zing — install in one command and start downloading.">
+  <link rel="canonical" href="https://zing.tharuk.pro/docs/get-started.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../style.css">
   <link rel="icon" href="/assets/favicon.ico">
   <link rel="apple-touch-icon" href="/assets/favicon.ico">
-  <link rel="stylesheet" href="../style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     nav .nav-inner { max-width: none; }
     .docs-layout {
@@ -76,25 +70,12 @@
       color: var(--accent); margin: 2rem 0 0.75rem;
       letter-spacing: -0.02em;
     }
-    .sidebar-content h2:target {
-      border-left: 3px solid var(--accent);
-      padding-left: 0.75rem;
-    }
-    .sidebar-content h3 {
-      font-family: var(--mono); font-size: 1rem; font-weight: 600;
-      color: var(--accent-light); margin: 1.5rem 0 0.5rem;
-    }
-    .sidebar-content h3:target {
-      border-left: 2px solid var(--accent);
-      padding-left: 0.5rem;
-    }
     .sidebar-content p {
       color: var(--muted); line-height: 1.7; margin-bottom: 1rem;
     }
     .sidebar-content strong { color: var(--text); }
     .sidebar-content a {
       color: var(--accent); text-decoration: none;
-      word-break: break-word; overflow-wrap: anywhere;
     }
     .sidebar-content a:hover { text-decoration: underline; }
     .sidebar-content code {
@@ -133,83 +114,11 @@
     @media (max-width: 768px) {
       .copy-btn { opacity: 1; }
     }
-    .sidebar-content ul, .sidebar-content ol {
+    .sidebar-content ul {
       color: var(--muted); line-height: 1.7;
       margin-bottom: 1rem; padding-left: 1.25rem;
     }
     .sidebar-content li { margin-bottom: 0.25rem; }
-    .sidebar-content li > .code-block { margin-top: 0.5rem; }
-    .sidebar-content blockquote {
-      border-left: 3px solid var(--accent); background: var(--bg-card);
-      padding: 0.75rem 1rem; margin-bottom: 1rem;
-      border-radius: 0 6px 6px 0;
-      color: var(--text); font-size: 0.9rem;
-    }
-    .sidebar-content blockquote p { color: var(--text); margin-bottom: 0; }
-    .sidebar-content hr {
-      border: none; border-top: 1px solid var(--border); margin: 2rem 0;
-    }
-    .table-wrap {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      margin-bottom: 1.5rem;
-    }
-    .table-wrap table {
-      width: max-content;
-      min-width: 100%;
-      margin-bottom: 0;
-    }
-    .sidebar-content table {
-      width: max-content; min-width: 100%;
-      border-collapse: collapse; font-size: 0.85rem;
-      margin-bottom: 1.5rem;
-    }
-    .sidebar-content th {
-      font-family: var(--mono); font-size: 0.72rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.06em;
-      padding: 0.75rem 1rem; text-align: left; color: var(--muted);
-      border-bottom: 1px solid var(--border); background: var(--bg-card);
-      white-space: nowrap;
-    }
-    .sidebar-content td {
-      padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);
-      color: var(--muted);
-      white-space: normal; word-break: normal;
-      overflow-wrap: break-word; max-width: 300px;
-    }
-    .sidebar-content img {
-      max-width: 100%; border-radius: 8px; border: 1px solid var(--border);
-      margin: 1rem 0;
-    }
-    .sidebar-content details {
-      background: var(--bg-elevated); border: 1px solid var(--border);
-      border-radius: 8px; padding: 1rem; margin-bottom: 1rem;
-    }
-    .sidebar-content summary {
-      font-family: var(--mono); font-size: 0.85rem;
-      cursor: pointer; color: var(--accent);
-    }
-    .callout {
-      border-left: 4px solid var(--accent);
-      background: var(--bg-card); padding: 0.75rem 1rem;
-      margin-bottom: 1rem; border-radius: 0 6px 6px 0;
-      font-size: 0.9rem; color: var(--text);
-    }
-    .callout-title {
-      font-family: var(--mono); font-size: 0.72rem;
-      text-transform: uppercase; letter-spacing: 0.06em;
-      display: block; margin-bottom: 0.25rem;
-    }
-    .callout-note { border-left-color: var(--accent); }
-    .callout-note .callout-title { color: var(--accent); }
-    .callout-tip { border-left-color: var(--green); }
-    .callout-tip .callout-title { color: var(--green); }
-    .callout-warning { border-left-color: #f59e0b; }
-    .callout-warning .callout-title { color: #f59e0b; }
-    .callout-caution { border-left-color: #f59e0b; }
-    .callout-caution .callout-title { color: #f59e0b; }
-    .callout-important { border-left-color: #ef4444; }
-    .callout-important .callout-title { color: #ef4444; }
     .doc-nav-buttons {
       display: flex; justify-content: space-between; gap: 1rem;
       margin: 2rem 0 1rem;
@@ -226,9 +135,6 @@
     }
     .doc-nav-next {
       margin-left: auto; text-align: right;
-    }
-    .doc-nav-prev {
-      text-align: left;
     }
     .doc-copyright {
       font-size: 0.78rem; color: var(--border-hover);
@@ -247,7 +153,6 @@
       background: rgba(0,0,0,0.5); z-index: 199;
     }
     .nav-overlay.active { display: block; }
-
     .sidebar-close {
       display: none;
       position: absolute; top: 0.5rem; right: 1rem;
@@ -259,7 +164,6 @@
     .sidebar-close:hover {
       color: var(--text); background: var(--bg-card);
     }
-
     .doc-breadcrumb {
       display: none;
       position: sticky;
@@ -275,15 +179,9 @@
       user-select: none;
       cursor: pointer;
     }
-    .doc-breadcrumb .bc-sep {
-      color: var(--border-hover);
-    }
-    .doc-breadcrumb .bc-section {
-      color: var(--text);
-    }
-    .doc-breadcrumb .bc-label {
-      color: var(--accent);
-    }
+    .doc-breadcrumb .bc-sep { color: var(--border-hover); }
+    .doc-breadcrumb .bc-section { color: var(--text); }
+    .doc-breadcrumb .bc-label { color: var(--accent); }
     @media (max-width: 768px) {
       .sidebar {
         display: flex;
@@ -299,11 +197,6 @@
       .sidebar-content { padding: 1.5rem 1rem 3rem; }
       .doc-breadcrumb { display: flex; }
       .docs-layout { flex-direction: column; }
-      .sidebar-content th,
-      .sidebar-content td {
-        padding: 0.5rem 0.5rem;
-        font-size: 0.78rem;
-      }
     }
   </style>
   <script>
@@ -314,7 +207,9 @@
   </script>
 </head>
 <body>
-    <nav aria-label="Main navigation">
+
+<!--NAV_START-->
+  <nav aria-label="Main navigation">
     <div class="nav-inner">
       <a href="/" class="nav-logo">
         <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -333,20 +228,12 @@
           <li><a href="/features">Features</a></li>
           <li><a href="/downloads">Downloads</a></li>
           <li class="nav-docs"><a href="/docs/" style="color:var(--accent)">Docs</a></li>
-          <li class="nav-docs-icon"><a href="/docs/" style="color:var(--accent)" title="Docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></a></li>
+          <li class="nav-docs-icon"><a href="/docs/" title="Docs" style="color:var(--accent)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></a></li>
           <li><a href="https://github.com/TharukRenuja/zing" rel="noopener noreferrer" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></a></li>
         </ul>
         <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
           <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
           </svg>
           <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
@@ -355,6 +242,7 @@
       </div>
     </div>
   </nav>
+<!--NAV_END-->
 
   <div class="nav-overlay" id="sidebar-overlay"></div>
 
@@ -363,112 +251,82 @@
       <rect x="3" y="3" width="18" height="18" rx="2"/>
       <line x1="9" y1="3" x2="9" y2="21"/>
     </svg>
-    <span>Docs</span><span class="bc-sep">/</span><span class="bc-section">Getting Started</span><span class="bc-sep">/</span><span class="bc-label">Installation</span>
+    <span>Docs</span>
+    <span class="bc-sep">/</span>
+    <span class="bc-label">Get Started</span>
   </div>
 
   <div class="docs-layout">
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-inner">
         <button class="sidebar-close" id="sidebar-close" aria-label="Close sidebar">&times;</button>
-<div class="sidebar-group">
-<div class="sidebar-heading">Basics</div>
-<a href="get-started.html" class="sidebar-link">Get Started</a>
-<a href="installation.html" class="sidebar-link active">Installation</a>
-</div>
-<div class="sidebar-group">
-<div class="sidebar-heading">Guides</div>
-<a href="daemon.html" class="sidebar-link">Daemon</a>
-<a href="tui.html" class="sidebar-link">Terminal UI (TUI)</a>
-<a href="gui.html" class="sidebar-link">Desktop GUI</a>
-<a href="pipe-mode.html" class="sidebar-link">Pipe Mode</a>
-<a href="browser-extension.html" class="sidebar-link">Browser Extension</a>
-</div>
-<div class="sidebar-group">
-<div class="sidebar-heading">Internals</div>
-<a href="download-engine.html" class="sidebar-link">Download Engine</a>
-<a href="architecture.html" class="sidebar-link">Architecture</a>
-</div>
-<div class="sidebar-group">
-<div class="sidebar-heading">Reference</div>
-<a href="cli.html" class="sidebar-link">CLI Reference</a>
-<a href="config.html" class="sidebar-link">Configuration</a>
-</div>
+        <div class="sidebar-group">
+          <div class="sidebar-heading">Basics</div>
+          <a href="get-started.html" class="sidebar-link active">Get Started</a>
+          <a href="installation.html" class="sidebar-link">Installation</a>
+        </div>
+        <div class="sidebar-group">
+          <div class="sidebar-heading">Guides</div>
+          <a href="daemon.html" class="sidebar-link">Daemon</a>
+          <a href="tui.html" class="sidebar-link">Terminal UI (TUI)</a>
+          <a href="gui.html" class="sidebar-link">Desktop GUI</a>
+          <a href="pipe-mode.html" class="sidebar-link">Pipe Mode</a>
+          <a href="browser-extension.html" class="sidebar-link">Browser Extension</a>
+        </div>
+        <div class="sidebar-group">
+          <div class="sidebar-heading">Internals</div>
+          <a href="download-engine.html" class="sidebar-link">Download Engine</a>
+          <a href="architecture.html" class="sidebar-link">Architecture</a>
+        </div>
+        <div class="sidebar-group">
+          <div class="sidebar-heading">Reference</div>
+          <a href="cli.html" class="sidebar-link">CLI Reference</a>
+          <a href="config.html" class="sidebar-link">Configuration</a>
+        </div>
       </div>
     </aside>
     <div class="sidebar-content">
-<h1 id="installation">Installation</h1>
-<h2 id="install-script-linuxmacos">Install script (Linux/macOS)</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>curl -fsSL https://raw.githubusercontent.com/TharukRenuja/zing/main/install.sh | sh
-</code></pre></div>
-<p>Installs <code>zing</code> and <code>zing-daemon</code> to <code>/usr/local/bin</code>. Optionally sets up <code>zing-daemon</code> as a systemd service.</p>
-<h2 id="pre-built-binaries">Pre-built binaries</h2>
-<p>Download from <a href="https://github.com/TharukRenuja/zing/releases/latest" rel="noopener noreferrer">Releases</a>:</p>
-<div class="table-wrap"><table>
-<thead>
-<tr><th>Platform</th><th>Archive</th></tr>
-</thead>
-<tbody>
-<tr><td>Linux (x86_64)</td><td><code>zing-latest-x86_64-linux.tar.gz</code></td></tr>
-<tr><td>Linux (aarch64)</td><td><code>zing-latest-aarch64-linux.tar.gz</code></td></tr>
-<tr><td>macOS (Intel)</td><td><code>zing-latest-x86_64-mac.dmg</code></td></tr>
-<tr><td>macOS (Apple Silicon)</td><td><code>zing-latest-aarch64-mac.dmg</code></td></tr>
-<tr><td>Windows</td><td><code>zing-latest-windows.msi</code></td></tr>
-</tbody>
-</table></div>
-<p>Extract the archive and place the binaries somewhere on your <code>PATH</code>.</p>
-<h2 id="build-from-source">Build from source</h2>
-<p>Requires Rust 1.75+.</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>git clone https://github.com/TharukRenuja/zing.git
+      <h1>Get Started</h1>
+      <p><strong>zing</strong> is a modern HTTP download manager built in Rust. Segmented downloads, adaptive connections, resume support, and a clean TUI — designed to be fast, reliable, and easy to use.</p>
+
+      <h2>Install</h2>
+      <p>One command to install on Linux or macOS:</p>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button>
+        <pre><code>curl -fsSL https://raw.githubusercontent.com/TharukRenuja/zing/main/install.sh | sh</code></pre>
+      </div>
+
+      <p>Or build from source (requires Rust 1.75+):</p>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button>
+        <pre><code>git clone https://github.com/TharukRenuja/zing.git
 cd zing
-cargo build --release
-./target/release/zing --help
-</code></pre></div>
-<h3 id="build-features">Build features</h3>
-<p>The CLI has one optional feature, on by default:</p>
-<div class="table-wrap"><table>
-<thead>
-<tr><th>Feature</th><th>Default</th><th>What it enables</th></tr>
-</thead>
-<tbody>
-<tr><td><code>tui</code></td><td>yes</td><td><code>zing tui</code> terminal UI</td></tr>
-</tbody>
-</table></div>
-<p>The desktop GUI is a separate binary. Build it from the workspace root:</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>cargo build --release --bin zing-gui
-</code></pre></div>
-<p><code>cargo build --release</code> builds both <code>zing</code> and <code>zing-gui</code>.</p>
-<p>Build the CLI without TUI:</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>cargo build --release --bin zing --no-default-features
-</code></pre></div>
-<h3 id="workspace-members">Workspace members</h3>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>zing/
-├── core/       # zing-core: download engine
-├── cli/        # zing: CLI frontend
-├── tui/        # zing-tui: terminal UI
-├── gui/        # zing-gui: desktop GUI
-├── daemon/     # zing-daemon: background daemon
-└── ext/        # zing-ext: utilities
-</code></pre></div>
-<h2 id="systemd-service-linux">Systemd service (Linux)</h2>
-<p>After installing the binaries:</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>zing daemon install    # install + start the systemd user service
-zing daemon status     # check status
-zing daemon uninstall  # remove the service
-</code></pre></div>
-<p>The service runs <code>zing-daemon</code> as a user service (<code>~/.config/systemd/user/zing-daemon.service</code>).</p>
-<h2 id="verify-installation">Verify installation</h2>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>zing --version
-zing daemon start      # start the background daemon
-zing list              # should return "No downloads."
-zing daemon stop
-</code></pre></div>
-<h2 id="browser-extension">Browser extension</h2>
-<p>Install the native messaging host so the <a href="https://github.com/TharukRenuja/zing-interceptor" rel="noopener noreferrer">zing Interceptor</a> browser extension can talk to zing:</p>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>zing extension install    # writes manifests for Chrome, Edge, and Firefox
-zing extension uninstall  # removes them
-</code></pre></div>
-<p>Then install the extension in your browser — see the <a href="browser-extension.html" rel="noopener noreferrer">Browser Extension</a> docs for details.</p>
-<div class="doc-nav-buttons"><a href="daemon.html" class="doc-nav-btn doc-nav-next">Daemon →</a></div>
+cargo build --release</code></pre>
+      </div>
+
+      <h2>Quick start</h2>
+      <p>Download a file:</p>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button>
+        <pre><code>zing https://example.com/file.zip</code></pre>
+      </div>
+
+      <p>Launch the TUI:</p>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button>
+        <pre><code>zing tui</code></pre>
+      </div>
+
+      <p>Start the daemon:</p>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button>
+        <pre><code>zing daemon start</code></pre>
+      </div>
+
+      <div class="doc-nav-buttons">
+        <a href="installation.html" class="doc-nav-btn doc-nav-next">Installation <span>&rarr;</span></a>
+      </div>
+
       <p class="doc-copyright">&copy; 2026 zing &middot; <a href="https://github.com/TharukRenuja/zing/blob/main/LICENSE" rel="noopener noreferrer">AGPL-3.0</a> &middot; <a href="https://www.rust-lang.org" rel="noopener noreferrer">Built with Rust</a></p>
     </div>
   </div>
@@ -489,13 +347,8 @@ zing extension uninstall  # removes them
         return mediaQuery.matches ? 'light' : 'dark';
       }
       function applyTheme(theme) {
-        if (theme === 'system') {
-          document.documentElement.removeAttribute('data-theme');
-          updateIcons(mediaQuery.matches ? 'light' : 'dark');
-        } else {
-          document.documentElement.setAttribute('data-theme', theme);
-          updateIcons(theme);
-        }
+        document.documentElement.setAttribute('data-theme', theme);
+        updateIcons(theme);
       }
       applyTheme(getEffectiveTheme());
       mediaQuery.addEventListener('change', (e) => {
@@ -510,19 +363,16 @@ zing extension uninstall  # removes them
       const sidebarToggle = document.getElementById('sidebar-toggle');
       const sidebar = document.getElementById('sidebar');
       const sidebarOverlay = document.getElementById('sidebar-overlay');
-
       function openSidebar() {
         sidebar.classList.add('open');
         sidebarOverlay.classList.add('active');
         document.body.style.overflow = 'hidden';
       }
-
       function closeSidebar() {
         sidebar.classList.remove('open');
         sidebarOverlay.classList.remove('active');
         document.body.style.overflow = '';
       }
-
       if (sidebarToggle) {
         sidebarToggle.addEventListener('click', (e) => {
           e.stopPropagation();
@@ -530,16 +380,9 @@ zing extension uninstall  # removes them
           else openSidebar();
         });
       }
-
-      if (sidebarOverlay) {
-        sidebarOverlay.addEventListener('click', closeSidebar);
-      }
-
+      if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
       const sidebarClose = document.getElementById('sidebar-close');
-      if (sidebarClose) {
-        sidebarClose.addEventListener('click', closeSidebar);
-      }
-
+      if (sidebarClose) sidebarClose.addEventListener('click', closeSidebar);
       if (sidebar) {
         sidebar.querySelectorAll('a').forEach(link => {
           link.addEventListener('click', closeSidebar);
@@ -551,7 +394,7 @@ zing extension uninstall  # removes them
       const text = code.textContent;
       navigator.clipboard.writeText(text).then(() => {
         const orig = btn.innerHTML;
-        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
         setTimeout(() => { btn.innerHTML = orig; }, 1500);
       }).catch(() => {});
     }

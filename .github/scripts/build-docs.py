@@ -264,54 +264,57 @@ def convert_table(rows):
     html_s += '</tbody>\n</table></div>'
     return html_s
 
-SECTION_ORDER = {'Basics': 0, 'Guides': 1, 'Reference': 2}
+SECTION_ORDER = {'Getting Started': 0, 'Basics': 0, 'Guides': 1, 'Internals': 2, 'Reference': 3}
 
 FALLBACK_TITLES = {
     'getting-started': 'Getting Started', 'architecture': 'Architecture',
-    'download-engine': 'Download Engine', 'cli-reference': 'CLI Reference',
+    'download-engine': 'Download Engine', 'cli': 'CLI Reference',
     'daemon': 'Daemon Mode', 'gui': 'GUI Overview',
     'browser-extension': 'Browser Extension', 'tui': 'Terminal UI',
-    'troubleshooting': 'Troubleshooting', 'configuration': 'Configuration',
+    'installation': 'Installation', 'pipe-mode': 'Pipe Mode',
+    'config': 'Configuration',
 }
 
 FALLBACK_SECTIONS = {
-    'getting-started': 'Basics', 'architecture': 'Basics',
-    'download-engine': 'Guides', 'cli-reference': 'Guides', 'daemon': 'Guides', 'gui': 'Guides',
-    'browser-extension': 'Guides', 'tui': 'Guides',
-    'troubleshooting': 'Reference', 'configuration': 'Reference',
+    'getting-started': 'Basics', 'architecture': 'Basics', 'installation': 'Basics',
+    'download-engine': 'Guides', 'cli': 'Guides', 'daemon': 'Guides', 'gui': 'Guides',
+    'browser-extension': 'Guides', 'tui': 'Guides', 'pipe-mode': 'Guides',
+    'config': 'Reference',
 }
 
 FALLBACK_ORDER = {
-    'getting-started': 1, 'architecture': 2,
-    'download-engine': 1, 'cli-reference': 2, 'daemon': 3, 'gui': 4,
-    'browser-extension': 5, 'tui': 6,
-    'troubleshooting': 1, 'configuration': 2,
+    'getting-started': 1, 'architecture': 2, 'installation': 3,
+    'download-engine': 1, 'cli': 2, 'daemon': 3, 'gui': 4,
+    'browser-extension': 5, 'tui': 6, 'pipe-mode': 7,
+    'config': 1,
 }
 
 FALLBACK_DESC = {
-    'getting-started': 'Install and run zing for the first time. Build from source or download a pre-built binary.',
+    'getting-started': 'Install and run zing for the first time.',
     'architecture': 'How zing is organized: workspace structure, crate dependencies, data flow, and design decisions.',
     'download-engine': 'How zing downloads files: adaptive connections, segment allocation, work stealing, retry logic, and mirror fallback.',
-    'cli-reference': 'Full zing CLI reference. Every command, flag, and config option explained.',
+    'cli': 'Full zing CLI reference. Every command, flag, and config option explained.',
     'daemon': 'Run zing as a background daemon with JSON-RPC over Unix socket or TCP. Manage downloads remotely.',
     'gui': 'Overview of the Tauri v2 GUI: main window, add download, settings, confirm dialogs, and theme system.',
     'browser-extension': 'Capture downloads from Chrome and Firefox directly into zing via Native Messaging.',
     'tui': 'Terminal UI built with ratatui: task list, per-connection detail, block map, and log panel.',
-    'troubleshooting': 'Common issues and solutions for zing downloads, connections, and configuration.',
-    'configuration': 'Complete configuration reference for zing: all fields, defaults, and examples.',
+    'installation': 'Install zing from pre-built binaries or build from source.',
+    'pipe-mode': 'Pipe URLs from stdin to zing for scripted workflows.',
+    'config': 'Complete configuration reference for zing: all fields, defaults, and examples.',
 }
 
 FALLBACK_KEYWORDS = {
     'getting-started': 'zing install, download manager setup, Rust cargo install, HTTP download tool',
     'architecture': 'zing architecture, workspace structure, Rust crates, download manager design',
     'download-engine': 'zing download engine, adaptive connections, segmented downloads, work stealing, retry logic',
-    'cli-reference': 'zing CLI, command line reference, download manager commands, flags and options',
+    'cli': 'zing CLI, command line reference, download manager commands, flags and options',
     'daemon': 'zing daemon, background service, JSON-RPC, Unix socket, TCP server',
     'gui': 'zing GUI, Tauri v2, desktop application, download manager interface, theme system',
     'browser-extension': 'zing browser extension, Chrome extension, Firefox extension, Native Messaging',
     'tui': 'zing TUI, terminal UI, ratatui, terminal download manager, block map visualization',
-    'troubleshooting': 'zing troubleshooting, download errors, connection issues, resume problems',
-    'configuration': 'zing configuration, settings reference, config file format, download options',
+    'installation': 'zing installation, download manager setup, binary download, cargo install',
+    'pipe-mode': 'zing pipe mode, stdin, scripted downloads, batch downloads',
+    'config': 'zing configuration, settings reference, config file format, download options',
 }
 
 def parse_metadata(md):
@@ -329,7 +332,7 @@ def parse_metadata(md):
 def load_pages(docs_dir):
     pages = []
     for fname in sorted(os.listdir(docs_dir)):
-        if not fname.endswith('.md'):
+        if not fname.endswith('.md') or fname.lower() == 'readme.md':
             continue
         slug = fname.replace('.md', '').lower()
         with open(os.path.join(docs_dir, fname)) as f:
@@ -347,14 +350,20 @@ def load_pages(docs_dir):
 def sidebar(pages, slug):
     groups = {}
     for p in pages:
-        groups.setdefault(p[2], []).append((p[0], p[1]))
+        section = p[2]
+        if section == 'Getting Started':
+            section = 'Basics'
+        groups.setdefault(section, []).append((p[0], p[1]))
     lines = []
-    for section in ['Basics', 'Guides', 'Reference']:
-        if section not in groups:
+    for section in ['Basics', 'Guides', 'Internals', 'Reference']:
+        if section not in groups and section != 'Basics':
             continue
         lines.append('<div class="sidebar-group">')
         lines.append(f'<div class="sidebar-heading">{section}</div>')
-        for href, label in groups[section]:
+        if section == 'Basics':
+            active = ' active' if slug == 'get-started' else ''
+            lines.append(f'<a href="get-started.html" class="sidebar-link{active}">Get Started</a>')
+        for href, label in groups.get(section, []):
             active = ' active' if href == slug else ''
             lines.append(f'<a href="{href}.html" class="sidebar-link{active}">{label}</a>')
         lines.append('</div>')
@@ -428,15 +437,16 @@ def make_page(title, body, slug, nav_template, footer_template, pages, is_index=
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
+    nav .nav-inner {{ max-width: none; }}
     .docs-layout {{
-      display: flex; min-height: calc(100vh - 56px);
+      display: flex; min-height: calc(100vh - 64px);
     }}
     .sidebar {{
       width: 300px; flex-shrink: 0;
       border-right: 1px solid var(--border);
       background: var(--bg-elevated);
       overflow-y: auto;
-      position: sticky; top: 56px; height: calc(100vh - 56px);
+      position: sticky; top: 64px; height: calc(100vh - 64px);
     }}
     .sidebar-inner {{
       padding: 0;
@@ -450,7 +460,7 @@ def make_page(title, body, slug, nav_template, footer_template, pages, is_index=
     .sidebar-heading {{
       font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
       text-transform: uppercase; letter-spacing: 0.08em;
-      color: var(--muted); padding: 1rem 1rem 0.25rem;
+      color: var(--accent); padding: 1rem 1rem 0.25rem;
     }}
     .sidebar-link {{
       display: block; padding: 0.5rem 1rem;
@@ -478,7 +488,7 @@ def make_page(title, body, slug, nav_template, footer_template, pages, is_index=
     }}
     .sidebar-content h2 {{
       font-family: var(--mono); font-size: 1.25rem; font-weight: 700;
-      color: var(--text); margin: 2rem 0 0.75rem;
+      color: var(--accent); margin: 2rem 0 0.75rem;
       letter-spacing: -0.02em;
     }}
     .sidebar-content h2:target {{
@@ -487,7 +497,7 @@ def make_page(title, body, slug, nav_template, footer_template, pages, is_index=
     }}
     .sidebar-content h3 {{
       font-family: var(--mono); font-size: 1rem; font-weight: 600;
-      color: var(--accent); margin: 1.5rem 0 0.5rem;
+      color: var(--accent-light); margin: 1.5rem 0 0.5rem;
     }}
     .sidebar-content h3:target {{
       border-left: 2px solid var(--accent);
@@ -648,7 +658,7 @@ def make_page(title, body, slug, nav_template, footer_template, pages, is_index=
     }}
     .nav-overlay {{
       display: none; position: fixed;
-      top: 56px; left: 0; right: 0; bottom: 0;
+      top: 64px; left: 0; right: 0; bottom: 0;
       background: rgba(0,0,0,0.5); z-index: 199;
     }}
     .nav-overlay.active {{ display: block; }}
@@ -668,7 +678,7 @@ def make_page(title, body, slug, nav_template, footer_template, pages, is_index=
     .doc-breadcrumb {{
       display: none;
       position: sticky;
-      top: 56px;
+      top: 64px;
       z-index: 50;
       align-items: center;
       gap: 0.5rem;
@@ -692,8 +702,8 @@ def make_page(title, body, slug, nav_template, footer_template, pages, is_index=
     @media (max-width: 768px) {{
       .sidebar {{
         display: flex;
-        position: fixed; top: 56px; left: 0;
-        width: 300px; height: calc(100dvh - 56px); z-index: 200;
+        position: fixed; top: 64px; left: 0;
+        width: 300px; height: calc(100dvh - 64px); z-index: 200;
         border-right: 1px solid var(--border);
         transform: translateX(-100%);
         transition: transform 0.25s ease;
@@ -1138,7 +1148,7 @@ if __name__ == '__main__':
 </head>
 <body>
 {four04_nav}
-  <main style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 56px - 80px);padding:2rem;text-align:center">
+  <main style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 64px - 80px);padding:2rem;text-align:center">
     <h1 style="font-size:4rem;font-family:var(--mono);color:var(--muted);margin-bottom:0.5rem">404</h1>
     <p style="color:var(--muted);font-size:1rem;margin-bottom:2rem;max-width:400px">The page you're looking for doesn't exist.</p>
     <div style="display:flex;gap:0.75rem;flex-wrap:wrap;justify-content:center">

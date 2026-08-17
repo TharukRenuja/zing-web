@@ -22,15 +22,16 @@
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
+    nav .nav-inner { max-width: none; }
     .docs-layout {
-      display: flex; min-height: calc(100vh - 56px);
+      display: flex; min-height: calc(100vh - 64px);
     }
     .sidebar {
       width: 300px; flex-shrink: 0;
       border-right: 1px solid var(--border);
       background: var(--bg-elevated);
       overflow-y: auto;
-      position: sticky; top: 56px; height: calc(100vh - 56px);
+      position: sticky; top: 64px; height: calc(100vh - 64px);
     }
     .sidebar-inner {
       padding: 0;
@@ -44,7 +45,7 @@
     .sidebar-heading {
       font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
       text-transform: uppercase; letter-spacing: 0.08em;
-      color: var(--muted); padding: 1rem 1rem 0.25rem;
+      color: var(--accent); padding: 1rem 1rem 0.25rem;
     }
     .sidebar-link {
       display: block; padding: 0.5rem 1rem;
@@ -72,7 +73,7 @@
     }
     .sidebar-content h2 {
       font-family: var(--mono); font-size: 1.25rem; font-weight: 700;
-      color: var(--text); margin: 2rem 0 0.75rem;
+      color: var(--accent); margin: 2rem 0 0.75rem;
       letter-spacing: -0.02em;
     }
     .sidebar-content h2:target {
@@ -81,7 +82,7 @@
     }
     .sidebar-content h3 {
       font-family: var(--mono); font-size: 1rem; font-weight: 600;
-      color: var(--accent); margin: 1.5rem 0 0.5rem;
+      color: var(--accent-light); margin: 1.5rem 0 0.5rem;
     }
     .sidebar-content h3:target {
       border-left: 2px solid var(--accent);
@@ -242,7 +243,7 @@
     }
     .nav-overlay {
       display: none; position: fixed;
-      top: 56px; left: 0; right: 0; bottom: 0;
+      top: 64px; left: 0; right: 0; bottom: 0;
       background: rgba(0,0,0,0.5); z-index: 199;
     }
     .nav-overlay.active { display: block; }
@@ -262,7 +263,7 @@
     .doc-breadcrumb {
       display: none;
       position: sticky;
-      top: 56px;
+      top: 64px;
       z-index: 50;
       align-items: center;
       gap: 0.5rem;
@@ -286,8 +287,8 @@
     @media (max-width: 768px) {
       .sidebar {
         display: flex;
-        position: fixed; top: 56px; left: 0;
-        width: 300px; height: calc(100dvh - 56px); z-index: 200;
+        position: fixed; top: 64px; left: 0;
+        width: 300px; height: calc(100dvh - 64px); z-index: 200;
         border-right: 1px solid var(--border);
         transform: translateX(-100%);
         transition: transform 0.25s ease;
@@ -370,12 +371,22 @@
       <div class="sidebar-inner">
         <button class="sidebar-close" id="sidebar-close" aria-label="Close sidebar">&times;</button>
 <div class="sidebar-group">
+<div class="sidebar-heading">Basics</div>
+<a href="get-started.html" class="sidebar-link">Get Started</a>
+<a href="installation.html" class="sidebar-link">Installation</a>
+</div>
+<div class="sidebar-group">
 <div class="sidebar-heading">Guides</div>
 <a href="daemon.html" class="sidebar-link">Daemon</a>
 <a href="tui.html" class="sidebar-link">Terminal UI (TUI)</a>
 <a href="gui.html" class="sidebar-link">Desktop GUI</a>
 <a href="pipe-mode.html" class="sidebar-link active">Pipe Mode</a>
 <a href="browser-extension.html" class="sidebar-link">Browser Extension</a>
+</div>
+<div class="sidebar-group">
+<div class="sidebar-heading">Internals</div>
+<a href="download-engine.html" class="sidebar-link">Download Engine</a>
+<a href="architecture.html" class="sidebar-link">Architecture</a>
 </div>
 <div class="sidebar-group">
 <div class="sidebar-heading">Reference</div>
