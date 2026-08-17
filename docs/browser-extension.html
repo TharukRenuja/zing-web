@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Native Messaging protocol for browser extensions — wire format, message schema, manifest setup, and security model.">
+  <meta name="keywords" content="zing, browser, extension, chrome, firefox, edge, native messaging, nm, manifest, wire protocol">
+  <title>Browser Extension - zing Docs</title>
+  <meta property="og:title" content="Browser Extension - zing Docs">
+  <meta property="og:description" content="Native Messaging protocol for browser extensions — wire format, message schema, manifest setup, and security model.">
+  <meta property="og:url" content="https://zing.tharuk.pro/docs/browser-extension.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Browser Extension - zing Docs">
+  <meta name="twitter:description" content="Native Messaging protocol for browser extensions — wire format, message schema, manifest setup, and security model.">
+  <link rel="canonical" href="https://zing.tharuk.pro/docs/browser-extension.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/favicon.ico">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    .docs-layout {
+      display: flex; min-height: calc(100vh - 56px);
+    }
+    .sidebar {
+      width: 300px; flex-shrink: 0;
+      border-right: 1px solid var(--border);
+      background: var(--bg-elevated);
+      overflow-y: auto;
+      position: sticky; top: 56px; height: calc(100vh - 56px);
+    }
+    .sidebar-inner {
+      padding: 0;
+      position: relative;
+      width: 100%;
+      min-width: 0;
+    }
+    .sidebar-group {
+      margin-bottom: 0;
+    }
+    .sidebar-heading {
+      font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--muted); padding: 1rem 1rem 0.25rem;
+    }
+    .sidebar-link {
+      display: block; padding: 0.5rem 1rem;
+      font-size: 0.9rem; color: var(--muted);
+      text-decoration: none; border-radius: 0;
+      transition: all 0.1s;
+    }
+    .sidebar-link:hover {
+      color: var(--text); background: var(--bg-card);
+    }
+    .sidebar-link.active {
+      color: var(--accent); background: rgba(79,142,247,0.08);
+      font-weight: 600;
+    }
+    .sidebar-content {
+      flex: 1; min-width: 0;
+      padding: 2rem 2rem 4rem;
+      max-width: none;
+    }
+    .sidebar-content h1 {
+      font-family: var(--mono); font-size: clamp(1.5rem, 2.5vw, 2rem);
+      font-weight: 700; letter-spacing: -0.03em; color: var(--text);
+      margin-bottom: 1.5rem; padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-content h2 {
+      font-family: var(--mono); font-size: 1.25rem; font-weight: 700;
+      color: var(--text); margin: 2rem 0 0.75rem;
+      letter-spacing: -0.02em;
+    }
+    .sidebar-content h2:target {
+      border-left: 3px solid var(--accent);
+      padding-left: 0.75rem;
+    }
+    .sidebar-content h3 {
+      font-family: var(--mono); font-size: 1rem; font-weight: 600;
+      color: var(--accent); margin: 1.5rem 0 0.5rem;
+    }
+    .sidebar-content h3:target {
+      border-left: 2px solid var(--accent);
+      padding-left: 0.5rem;
+    }
+    .sidebar-content p {
+      color: var(--muted); line-height: 1.7; margin-bottom: 1rem;
+    }
+    .sidebar-content strong { color: var(--text); }
+    .sidebar-content a {
+      color: var(--accent); text-decoration: none;
+      word-break: break-word; overflow-wrap: anywhere;
+    }
+    .sidebar-content a:hover { text-decoration: underline; }
+    .sidebar-content code {
+      font-family: var(--mono); font-size: 0.82rem;
+      background: var(--bg-card); padding: 0.15rem 0.4rem;
+      border-radius: 4px; color: var(--accent);
+      word-break: break-word; overflow-wrap: anywhere;
+    }
+    .sidebar-content pre {
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1rem; overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    .sidebar-content pre code {
+      background: none; padding: 0; font-size: 0.78rem;
+      color: var(--text); line-height: 1.6;
+    }
+    .code-block {
+      position: relative;
+    }
+    .code-block:hover .copy-btn {
+      opacity: 1;
+    }
+    .copy-btn {
+      position: absolute; top: 0.5rem; right: 0.5rem;
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--muted); font-size: 0.7rem;
+      font-family: var(--sans); padding: 0.2rem 0.5rem;
+      border-radius: 4px; cursor: pointer;
+      opacity: 0; transition: opacity 0.15s; z-index: 1;
+      display: inline-flex; align-items: center; gap: 0.25rem;
+    }
+    .copy-btn:hover {
+      color: var(--accent); border-color: var(--accent);
+    }
+    @media (max-width: 768px) {
+      .copy-btn { opacity: 1; }
+    }
+    .sidebar-content ul, .sidebar-content ol {
+      color: var(--muted); line-height: 1.7;
+      margin-bottom: 1rem; padding-left: 1.25rem;
+    }
+    .sidebar-content li { margin-bottom: 0.25rem; }
+    .sidebar-content li > .code-block { margin-top: 0.5rem; }
+    .sidebar-content blockquote {
+      border-left: 3px solid var(--accent); background: var(--bg-card);
+      padding: 0.75rem 1rem; margin-bottom: 1rem;
+      border-radius: 0 6px 6px 0;
+      color: var(--text); font-size: 0.9rem;
+    }
+    .sidebar-content blockquote p { color: var(--text); margin-bottom: 0; }
+    .sidebar-content hr {
+      border: none; border-top: 1px solid var(--border); margin: 2rem 0;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 1.5rem;
+    }
+    .table-wrap table {
+      width: max-content;
+      min-width: 100%;
+      margin-bottom: 0;
+    }
+    .sidebar-content table {
+      width: max-content; min-width: 100%;
+      border-collapse: collapse; font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    .sidebar-content th {
+      font-family: var(--mono); font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 0.75rem 1rem; text-align: left; color: var(--muted);
+      border-bottom: 1px solid var(--border); background: var(--bg-card);
+      white-space: nowrap;
+    }
+    .sidebar-content td {
+      padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);
+      color: var(--muted);
+      white-space: normal; word-break: normal;
+      overflow-wrap: break-word; max-width: 300px;
+    }
+    .sidebar-content img {
+      max-width: 100%; border-radius: 8px; border: 1px solid var(--border);
+      margin: 1rem 0;
+    }
+    .sidebar-content details {
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1rem; margin-bottom: 1rem;
+    }
+    .sidebar-content summary {
+      font-family: var(--mono); font-size: 0.85rem;
+      cursor: pointer; color: var(--accent);
+    }
+    .callout {
+      border-left: 4px solid var(--accent);
+      background: var(--bg-card); padding: 0.75rem 1rem;
+      margin-bottom: 1rem; border-radius: 0 6px 6px 0;
+      font-size: 0.9rem; color: var(--text);
+    }
+    .callout-title {
+      font-family: var(--mono); font-size: 0.72rem;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      display: block; margin-bottom: 0.25rem;
+    }
+    .callout-note { border-left-color: var(--accent); }
+    .callout-note .callout-title { color: var(--accent); }
+    .callout-tip { border-left-color: var(--green); }
+    .callout-tip .callout-title { color: var(--green); }
+    .callout-warning { border-left-color: #f59e0b; }
+    .callout-warning .callout-title { color: #f59e0b; }
+    .callout-caution { border-left-color: #f59e0b; }
+    .callout-caution .callout-title { color: #f59e0b; }
+    .callout-important { border-left-color: #ef4444; }
+    .callout-important .callout-title { color: #ef4444; }
+    .doc-nav-buttons {
+      display: flex; justify-content: space-between; gap: 1rem;
+      margin: 2rem 0 1rem;
+    }
+    .doc-nav-btn {
+      padding: 0.5rem 1rem; border-radius: 8px;
+      font-family: var(--sans); font-size: 0.82rem; font-weight: 500;
+      text-decoration: none; color: var(--muted);
+      border: 1px solid var(--border);
+      transition: all 0.15s; max-width: 50%;
+    }
+    .doc-nav-btn:hover {
+      color: var(--text); border-color: var(--muted);
+    }
+    .doc-nav-next {
+      margin-left: auto; text-align: right;
+    }
+    .doc-nav-prev {
+      text-align: left;
+    }
+    .doc-copyright {
+      font-size: 0.78rem; color: var(--border-hover);
+      padding-top: 1rem; border-top: 1px solid var(--border);
+      margin-top: 1.5rem; text-align: center;
+    }
+    .doc-copyright a {
+      color: var(--border-hover); text-decoration: none;
+    }
+    .doc-copyright a:hover {
+      color: var(--muted);
+    }
+    .nav-overlay {
+      display: none; position: fixed;
+      top: 56px; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5); z-index: 199;
+    }
+    .nav-overlay.active { display: block; }
+
+    .sidebar-close {
+      display: none;
+      position: absolute; top: 0.5rem; right: 1rem;
+      background: none; border: none;
+      color: var(--muted); font-size: 1.5rem;
+      cursor: pointer; padding: 0.25rem 0.5rem;
+      line-height: 1; border-radius: 4px;
+    }
+    .sidebar-close:hover {
+      color: var(--text); background: var(--bg-card);
+    }
+
+    .doc-breadcrumb {
+      display: none;
+      position: sticky;
+      top: 56px;
+      z-index: 50;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border);
+      font-size: 0.78rem;
+      color: var(--muted);
+      user-select: none;
+      cursor: pointer;
+    }
+    .doc-breadcrumb .bc-sep {
+      color: var(--border-hover);
+    }
+    .doc-breadcrumb .bc-section {
+      color: var(--text);
+    }
+    .doc-breadcrumb .bc-label {
+      color: var(--accent);
+    }
+    @media (max-width: 768px) {
+      .sidebar {
+        display: flex;
+        position: fixed; top: 56px; left: 0;
+        width: 300px; height: calc(100dvh - 56px); z-index: 200;
+        border-right: 1px solid var(--border);
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        box-shadow: 4px 0 12px rgba(0,0,0,0.2);
+      }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-close { display: block; }
+      .sidebar-content { padding: 1.5rem 1rem 3rem; }
+      .doc-breadcrumb { display: flex; }
+      .docs-layout { flex-direction: column; }
+      .sidebar-content th,
+      .sidebar-content td {
+        padding: 0.5rem 0.5rem;
+        font-size: 0.78rem;
+      }
+    }
+  </style>
+  <script>
+    (function () {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+</head>
+<body>
+    <nav aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g clip-path="url(#navclip)">
+            <rect x="220.935" y="157" width="130.495" height="144.914" transform="rotate(24.4305 220.935 157)" fill="var(--accent)"/>
+            <path d="M225.366 184.462L252.513 215.691L175.768 282.404L274.323 323.227L247.177 291.998L323.922 225.285L225.366 184.462ZM34.2623 47.0682L425.538 208.62L323.484 297.334L465.427 460.621L74.1511 299.069L176.205 210.355L34.2623 47.0682Z" fill="var(--text)" shape-rendering="crispEdges"/>
+          </g>
+          <defs>
+            <clipPath id="navclip"><rect width="500" height="500" rx="80"/></clipPath>
+          </defs>
+        </svg>
+        zing
+      </a>
+      <div class="nav-right">
+        <ul class="nav-links">
+          <li><a href="/features">Features</a></li>
+          <li><a href="/downloads">Downloads</a></li>
+          <li class="nav-docs"><a href="/docs/" style="color:var(--accent)">Docs</a></li>
+          <li class="nav-docs-icon"><a href="/docs/" style="color:var(--accent)" title="Docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></a></li>
+          <li><a href="https://github.com/TharukRenuja/zing" rel="noopener noreferrer" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></a></li>
+        </ul>
+        <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+          <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="nav-overlay" id="sidebar-overlay"></div>
+
+  <div class="doc-breadcrumb" id="sidebar-toggle" role="button" tabindex="0" aria-label="Toggle docs navigation">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0">
+      <rect x="3" y="3" width="18" height="18" rx="2"/>
+      <line x1="9" y1="3" x2="9" y2="21"/>
+    </svg>
+    <span>Docs</span><span class="bc-sep">/</span><span class="bc-section">Guides</span><span class="bc-sep">/</span><span class="bc-label">Browser Extension</span>
+  </div>
+
+  <div class="docs-layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <button class="sidebar-close" id="sidebar-close" aria-label="Close sidebar">&times;</button>
+<div class="sidebar-group">
+<div class="sidebar-heading">Guides</div>
+<a href="daemon.html" class="sidebar-link">Daemon</a>
+<a href="tui.html" class="sidebar-link">Terminal UI (TUI)</a>
+<a href="gui.html" class="sidebar-link">Desktop GUI</a>
+<a href="pipe-mode.html" class="sidebar-link">Pipe Mode</a>
+<a href="browser-extension.html" class="sidebar-link active">Browser Extension</a>
+</div>
+<div class="sidebar-group">
+<div class="sidebar-heading">Reference</div>
+<a href="cli.html" class="sidebar-link">CLI Reference</a>
+<a href="config.html" class="sidebar-link">Configuration</a>
+</div>
+      </div>
+    </aside>
+    <div class="sidebar-content">
+<h1 id="browser-extension">Browser Extension</h1>
+<p>zing communicates with browser extensions via <a href="https://developer.chrome.com/docs/extensions/develop/concepts/native-messaging" rel="noopener noreferrer">Native Messaging</a>. The <code>zing nm</code> command runs as a native host process, and <code>zing extension install/uninstall</code> manages the manifest files.</p>
+<p>The companion extension is available at <strong><https://github.com/TharukRenuja/zing-interceptor></strong>.</p>
+<h2 id="setup">Setup</h2>
+<p>The extension works out of the box once the native host manifests are installed. The zing installer (<code>install.sh</code>) runs this automatically; you can also do it by hand:</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code># Install native host manifests for all browsers
+zing extension install
+
+# Remove manifests
+zing extension uninstall
+</code></pre></div>
+<p>Then install the companion extension in your browser:</p>
+<ul>
+<li><strong>Chrome / Edge</strong>: Load unpacked from the <code>dist/chrome/</code> directory (or build with <code>./build.sh</code>)
+</li>
+<li><strong>Firefox</strong>: Install from <a href="https://addons.mozilla.org" rel="noopener noreferrer">AMO</a> or load temporarily from <code>dist/firefox/</code>
+</li>
+</ul>
+<p>No extension ID editing is needed — the manifest lists the real, deterministic IDs.</p>
+<h3 id="manifest-locations">Manifest locations</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr><th>Browser</th><th>Path (Linux)</th></tr>
+</thead>
+<tbody>
+<tr><td>Chrome</td><td><code>~/.config/google-chrome/NativeMessagingHosts/oss.zing.intercept.json</code></td></tr>
+<tr><td>Edge</td><td><code>~/.config/microsoft-edge/NativeMessagingHosts/oss.zing.intercept.json</code></td></tr>
+<tr><td>Firefox</td><td><code>~/.mozilla/native-messaging-hosts/oss.zing.intercept.json</code></td></tr>
+</tbody>
+</table></div>
+<p>On Windows, manifests are written under <code>%LOCALAPPDATA%\zing\native-messaging-hosts\</code> and registered in the registry (<code>HKCU\Software\{Google\Chrome, Microsoft\Edge, Mozilla}\NativeMessagingHosts\</code>).</p>
+<h3 id="manifest-content">Manifest content</h3>
+<p>Chrome/Edge:</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{
+  "name": "oss.zing.intercept",
+  "description": "zing download manager",
+  "path": "/usr/bin/zing",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://bcpghfjbokiclpfonepejdcndaoomcpf/"
+  ]
+}
+</code></pre></div>
+<p>Firefox:</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{
+  "name": "oss.zing.intercept",
+  "description": "zing download manager",
+  "path": "/usr/bin/zing",
+  "type": "stdio",
+  "allowed_extensions": [
+    "oss.zing.intercept@tharukrj"
+  ]
+}
+</code></pre></div>
+<p><strong>IDs are deterministic</strong> — no manual replacement needed. The Chromium ID (<code>bcpghfjbokiclpfonepejdcndaoomcpf</code>) is derived from the public key baked into the extension's <code>manifest.json</code>, and the gecko ID (<code>oss.zing.intercept@tharukrj</code>) is declared there as <code>browser_specific_settings.gecko.id</code>. If you regenerate the extension keypair, update both the extension manifest and the <code>CHROMIUM_ID</code> constant in <code>cli/src/extension.rs</code> together.</p>
+<h2 id="wire-protocol">Wire protocol</h2>
+<p>Each message is:</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>[4 bytes: length in little-endian][payload: UTF-8 JSON]
+</code></pre></div>
+<ul>
+<li>Length is a <code>uint32</code> in little-endian byte order
+</li>
+<li>Payload is valid JSON (no trailing newline)
+</li>
+<li>Maximum message size: 1 MB
+</li>
+</ul>
+<h3 id="reading-messages-host-extension">Reading messages (host → extension)</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>import struct, sys, json
+raw_length = sys.stdin.buffer.read(4)
+length = struct.unpack('<I', raw_length)[0]
+payload = sys.stdin.buffer.read(length)
+return json.loads(payload)
+</code></pre></div>
+<h3 id="writing-messages-extension-host">Writing messages (extension → host)</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>import struct, sys, json
+def send(obj):
+    body = json.dumps(obj).encode('utf-8')
+    sys.stdout.buffer.write(struct.pack('<I', len(body)))
+    sys.stdout.buffer.write(body)
+    sys.stdout.buffer.flush()
+</code></pre></div>
+<h2 id="message-reference">Message reference</h2>
+<h3 id="ping"><code>ping</code></h3>
+<p>Health check.</p>
+<p><strong>Request:</strong></p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{ "action": "ping" }
+</code></pre></div>
+<p><strong>Response:</strong></p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{ "ok": true }
+</code></pre></div>
+<hr>
+<h3 id="adduri"><code>addUri</code></h3>
+<p>Add a download. Returns the task ID.</p>
+<p><strong>Request:</strong></p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{
+  "action": "addUri",
+  "params": {
+    "url": "https://example.com/file.zip",
+    "filename": "file.zip",
+    "dir": "/home/user/Downloads",
+    "connections": 8
+  }
+}
+</code></pre></div>
+<p><strong>Response:</strong></p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{ "ok": true, "result": { "id": 1 } }
+</code></pre></div>
+<hr>
+<h3 id="list"><code>list</code></h3>
+<p>List all tasks.</p>
+<p><strong>Request:</strong></p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{ "action": "list" }
+</code></pre></div>
+<p><strong>Response:</strong></p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{
+  "ok": true,
+  "result": {
+    "tasks": [
+      {
+        "id": 1,
+        "url": "https://example.com/file.zip",
+        "filename": "file.zip",
+        "total_bytes": 1048576,
+        "downloaded": 524288,
+        "speed": 1048576,
+        "peak_speed": 2097152,
+        "paused": false,
+        "done": false,
+        "error": null,
+        "status": "Downloading",
+        "connections": 4,
+        "completed_blocks": 32,
+        "total_blocks": 64
+      }
+    ]
+  }
+}
+</code></pre></div>
+<hr>
+<h3 id="tellstatus"><code>tellStatus</code></h3>
+<p>Get status for a single task.</p>
+<p><strong>Request:</strong></p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{ "action": "tellStatus", "id": 1 }
+</code></pre></div>
+<p><strong>Response:</strong> Same shape as a single entry in <code>list</code>.</p>
+<hr>
+<h3 id="pause"><code>pause</code></h3>
+<p><strong>Request:</strong></p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{ "action": "pause", "id": 1 }
+</code></pre></div>
+<p><strong>Response:</strong></p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{ "ok": true, "result": { "id": 1, "status": "paused" } }
+</code></pre></div>
+<hr>
+<h3 id="resume"><code>resume</code></h3>
+<p><strong>Request:</strong></p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{ "action": "resume", "id": 1 }
+</code></pre></div>
+<p><strong>Response:</strong></p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{ "ok": true, "result": { "id": 1, "status": "resumed" } }
+</code></pre></div>
+<hr>
+<h3 id="stop"><code>stop</code></h3>
+<p><strong>Request:</strong></p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{ "action": "stop", "id": 1 }
+</code></pre></div>
+<p><strong>Response:</strong></p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{ "ok": true, "result": { "ok": true } }
+</code></pre></div>
+<hr>
+<h3 id="remove"><code>remove</code></h3>
+<p><strong>Request:</strong></p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{ "action": "remove", "id": 1 }
+</code></pre></div>
+<p><strong>Response:</strong></p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{ "ok": true, "result": { "ok": true } }
+</code></pre></div>
+<hr>
+<h3 id="version"><code>version</code></h3>
+<p><strong>Request:</strong></p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{ "action": "version" }
+</code></pre></div>
+<p><strong>Response:</strong></p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{ "ok": true, "result": "0.2.4" }
+</code></pre></div>
+<h2 id="error-responses">Error responses</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{
+  "ok": false,
+  "error": "Human-readable error message"
+}
+</code></pre></div>
+<p>Common errors: - Task ID not found - URL missing or invalid - Daemon not running</p>
+<h2 id="daemon-lifecycle">Daemon lifecycle</h2>
+<p>The host assumes the daemon is running. If <code>ping</code> fails, the extension should: 1. Ask the user to run <code>zing daemon start</code>, or 2. Spawn <code>zing-daemon</code> from the same directory as the host binary (future work).</p>
+<h2 id="security">Security</h2>
+<ul>
+<li>No token in logs
+</li>
+<li>Auth token file has <code>0o600</code> permissions
+</li>
+<li>Token rotates on each daemon restart
+</li>
+<li>No listening port exposed (Unix socket only on Linux)
+</li>
+</ul>
+<div class="doc-nav-buttons"><a href="pipe-mode.html" class="doc-nav-btn doc-nav-prev">← Pipe Mode</a><a href="cli.html" class="doc-nav-btn doc-nav-next">CLI Reference →</a></div>
+      <p class="doc-copyright">&copy; 2026 zing &middot; <a href="https://github.com/TharukRenuja/zing/blob/main/LICENSE" rel="noopener noreferrer">AGPL-3.0</a> &middot; <a href="https://www.rust-lang.org" rel="noopener noreferrer">Built with Rust</a></p>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const themeToggle = document.getElementById('theme-toggle');
+      const sunIcon = themeToggle.querySelector('.sun-icon');
+      const moonIcon = themeToggle.querySelector('.moon-icon');
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
+      function updateIcons(theme) {
+        sunIcon.style.display = theme === 'light' ? 'none' : 'block';
+        moonIcon.style.display = theme === 'light' ? 'block' : 'none';
+      }
+      function getEffectiveTheme() {
+        const saved = localStorage.getItem('theme');
+        if (saved) return saved;
+        return mediaQuery.matches ? 'light' : 'dark';
+      }
+      function applyTheme(theme) {
+        if (theme === 'system') {
+          document.documentElement.removeAttribute('data-theme');
+          updateIcons(mediaQuery.matches ? 'light' : 'dark');
+        } else {
+          document.documentElement.setAttribute('data-theme', theme);
+          updateIcons(theme);
+        }
+      }
+      applyTheme(getEffectiveTheme());
+      mediaQuery.addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) applyTheme(e.matches ? 'light' : 'dark');
+      });
+      themeToggle.addEventListener('click', () => {
+        const currentTheme = getEffectiveTheme();
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('theme', newTheme);
+        applyTheme(newTheme);
+      });
+      const sidebarToggle = document.getElementById('sidebar-toggle');
+      const sidebar = document.getElementById('sidebar');
+      const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+      function openSidebar() {
+        sidebar.classList.add('open');
+        sidebarOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeSidebar() {
+        sidebar.classList.remove('open');
+        sidebarOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (sidebar.classList.contains('open')) closeSidebar();
+          else openSidebar();
+        });
+      }
+
+      if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeSidebar);
+      }
+
+      const sidebarClose = document.getElementById('sidebar-close');
+      if (sidebarClose) {
+        sidebarClose.addEventListener('click', closeSidebar);
+      }
+
+      if (sidebar) {
+        sidebar.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', closeSidebar);
+        });
+      }
+    })();
+    function copyCode(btn) {
+      const code = btn.parentElement.querySelector('pre code');
+      const text = code.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+        setTimeout(() => { btn.innerHTML = orig; }, 1500);
+      }).catch(() => {});
+    }
+  </script>
+</body>
+</html>

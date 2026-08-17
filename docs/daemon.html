@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Background downloads with zing-daemon — JSON-RPC server, task lifecycle, session persistence, scheduled downloads, concurrency control, systemd, and event hooks.">
+  <meta name="keywords" content="zing, daemon, background, rpc, json-rpc, unix socket, task manager, scheduler, systemd, session, event hooks">
+  <title>Daemon - zing Docs</title>
+  <meta property="og:title" content="Daemon - zing Docs">
+  <meta property="og:description" content="Background downloads with zing-daemon — JSON-RPC server, task lifecycle, session persistence, scheduled downloads, concurrency control, systemd, and event hooks.">
+  <meta property="og:url" content="https://zing.tharuk.pro/docs/daemon.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Daemon - zing Docs">
+  <meta name="twitter:description" content="Background downloads with zing-daemon — JSON-RPC server, task lifecycle, session persistence, scheduled downloads, concurrency control, systemd, and event hooks.">
+  <link rel="canonical" href="https://zing.tharuk.pro/docs/daemon.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/favicon.ico">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    .docs-layout {
+      display: flex; min-height: calc(100vh - 56px);
+    }
+    .sidebar {
+      width: 300px; flex-shrink: 0;
+      border-right: 1px solid var(--border);
+      background: var(--bg-elevated);
+      overflow-y: auto;
+      position: sticky; top: 56px; height: calc(100vh - 56px);
+    }
+    .sidebar-inner {
+      padding: 0;
+      position: relative;
+      width: 100%;
+      min-width: 0;
+    }
+    .sidebar-group {
+      margin-bottom: 0;
+    }
+    .sidebar-heading {
+      font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--muted); padding: 1rem 1rem 0.25rem;
+    }
+    .sidebar-link {
+      display: block; padding: 0.5rem 1rem;
+      font-size: 0.9rem; color: var(--muted);
+      text-decoration: none; border-radius: 0;
+      transition: all 0.1s;
+    }
+    .sidebar-link:hover {
+      color: var(--text); background: var(--bg-card);
+    }
+    .sidebar-link.active {
+      color: var(--accent); background: rgba(79,142,247,0.08);
+      font-weight: 600;
+    }
+    .sidebar-content {
+      flex: 1; min-width: 0;
+      padding: 2rem 2rem 4rem;
+      max-width: none;
+    }
+    .sidebar-content h1 {
+      font-family: var(--mono); font-size: clamp(1.5rem, 2.5vw, 2rem);
+      font-weight: 700; letter-spacing: -0.03em; color: var(--text);
+      margin-bottom: 1.5rem; padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-content h2 {
+      font-family: var(--mono); font-size: 1.25rem; font-weight: 700;
+      color: var(--text); margin: 2rem 0 0.75rem;
+      letter-spacing: -0.02em;
+    }
+    .sidebar-content h2:target {
+      border-left: 3px solid var(--accent);
+      padding-left: 0.75rem;
+    }
+    .sidebar-content h3 {
+      font-family: var(--mono); font-size: 1rem; font-weight: 600;
+      color: var(--accent); margin: 1.5rem 0 0.5rem;
+    }
+    .sidebar-content h3:target {
+      border-left: 2px solid var(--accent);
+      padding-left: 0.5rem;
+    }
+    .sidebar-content p {
+      color: var(--muted); line-height: 1.7; margin-bottom: 1rem;
+    }
+    .sidebar-content strong { color: var(--text); }
+    .sidebar-content a {
+      color: var(--accent); text-decoration: none;
+      word-break: break-word; overflow-wrap: anywhere;
+    }
+    .sidebar-content a:hover { text-decoration: underline; }
+    .sidebar-content code {
+      font-family: var(--mono); font-size: 0.82rem;
+      background: var(--bg-card); padding: 0.15rem 0.4rem;
+      border-radius: 4px; color: var(--accent);
+      word-break: break-word; overflow-wrap: anywhere;
+    }
+    .sidebar-content pre {
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1rem; overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    .sidebar-content pre code {
+      background: none; padding: 0; font-size: 0.78rem;
+      color: var(--text); line-height: 1.6;
+    }
+    .code-block {
+      position: relative;
+    }
+    .code-block:hover .copy-btn {
+      opacity: 1;
+    }
+    .copy-btn {
+      position: absolute; top: 0.5rem; right: 0.5rem;
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--muted); font-size: 0.7rem;
+      font-family: var(--sans); padding: 0.2rem 0.5rem;
+      border-radius: 4px; cursor: pointer;
+      opacity: 0; transition: opacity 0.15s; z-index: 1;
+      display: inline-flex; align-items: center; gap: 0.25rem;
+    }
+    .copy-btn:hover {
+      color: var(--accent); border-color: var(--accent);
+    }
+    @media (max-width: 768px) {
+      .copy-btn { opacity: 1; }
+    }
+    .sidebar-content ul, .sidebar-content ol {
+      color: var(--muted); line-height: 1.7;
+      margin-bottom: 1rem; padding-left: 1.25rem;
+    }
+    .sidebar-content li { margin-bottom: 0.25rem; }
+    .sidebar-content li > .code-block { margin-top: 0.5rem; }
+    .sidebar-content blockquote {
+      border-left: 3px solid var(--accent); background: var(--bg-card);
+      padding: 0.75rem 1rem; margin-bottom: 1rem;
+      border-radius: 0 6px 6px 0;
+      color: var(--text); font-size: 0.9rem;
+    }
+    .sidebar-content blockquote p { color: var(--text); margin-bottom: 0; }
+    .sidebar-content hr {
+      border: none; border-top: 1px solid var(--border); margin: 2rem 0;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 1.5rem;
+    }
+    .table-wrap table {
+      width: max-content;
+      min-width: 100%;
+      margin-bottom: 0;
+    }
+    .sidebar-content table {
+      width: max-content; min-width: 100%;
+      border-collapse: collapse; font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    .sidebar-content th {
+      font-family: var(--mono); font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 0.75rem 1rem; text-align: left; color: var(--muted);
+      border-bottom: 1px solid var(--border); background: var(--bg-card);
+      white-space: nowrap;
+    }
+    .sidebar-content td {
+      padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);
+      color: var(--muted);
+      white-space: normal; word-break: normal;
+      overflow-wrap: break-word; max-width: 300px;
+    }
+    .sidebar-content img {
+      max-width: 100%; border-radius: 8px; border: 1px solid var(--border);
+      margin: 1rem 0;
+    }
+    .sidebar-content details {
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1rem; margin-bottom: 1rem;
+    }
+    .sidebar-content summary {
+      font-family: var(--mono); font-size: 0.85rem;
+      cursor: pointer; color: var(--accent);
+    }
+    .callout {
+      border-left: 4px solid var(--accent);
+      background: var(--bg-card); padding: 0.75rem 1rem;
+      margin-bottom: 1rem; border-radius: 0 6px 6px 0;
+      font-size: 0.9rem; color: var(--text);
+    }
+    .callout-title {
+      font-family: var(--mono); font-size: 0.72rem;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      display: block; margin-bottom: 0.25rem;
+    }
+    .callout-note { border-left-color: var(--accent); }
+    .callout-note .callout-title { color: var(--accent); }
+    .callout-tip { border-left-color: var(--green); }
+    .callout-tip .callout-title { color: var(--green); }
+    .callout-warning { border-left-color: #f59e0b; }
+    .callout-warning .callout-title { color: #f59e0b; }
+    .callout-caution { border-left-color: #f59e0b; }
+    .callout-caution .callout-title { color: #f59e0b; }
+    .callout-important { border-left-color: #ef4444; }
+    .callout-important .callout-title { color: #ef4444; }
+    .doc-nav-buttons {
+      display: flex; justify-content: space-between; gap: 1rem;
+      margin: 2rem 0 1rem;
+    }
+    .doc-nav-btn {
+      padding: 0.5rem 1rem; border-radius: 8px;
+      font-family: var(--sans); font-size: 0.82rem; font-weight: 500;
+      text-decoration: none; color: var(--muted);
+      border: 1px solid var(--border);
+      transition: all 0.15s; max-width: 50%;
+    }
+    .doc-nav-btn:hover {
+      color: var(--text); border-color: var(--muted);
+    }
+    .doc-nav-next {
+      margin-left: auto; text-align: right;
+    }
+    .doc-nav-prev {
+      text-align: left;
+    }
+    .doc-copyright {
+      font-size: 0.78rem; color: var(--border-hover);
+      padding-top: 1rem; border-top: 1px solid var(--border);
+      margin-top: 1.5rem; text-align: center;
+    }
+    .doc-copyright a {
+      color: var(--border-hover); text-decoration: none;
+    }
+    .doc-copyright a:hover {
+      color: var(--muted);
+    }
+    .nav-overlay {
+      display: none; position: fixed;
+      top: 56px; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5); z-index: 199;
+    }
+    .nav-overlay.active { display: block; }
+
+    .sidebar-close {
+      display: none;
+      position: absolute; top: 0.5rem; right: 1rem;
+      background: none; border: none;
+      color: var(--muted); font-size: 1.5rem;
+      cursor: pointer; padding: 0.25rem 0.5rem;
+      line-height: 1; border-radius: 4px;
+    }
+    .sidebar-close:hover {
+      color: var(--text); background: var(--bg-card);
+    }
+
+    .doc-breadcrumb {
+      display: none;
+      position: sticky;
+      top: 56px;
+      z-index: 50;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border);
+      font-size: 0.78rem;
+      color: var(--muted);
+      user-select: none;
+      cursor: pointer;
+    }
+    .doc-breadcrumb .bc-sep {
+      color: var(--border-hover);
+    }
+    .doc-breadcrumb .bc-section {
+      color: var(--text);
+    }
+    .doc-breadcrumb .bc-label {
+      color: var(--accent);
+    }
+    @media (max-width: 768px) {
+      .sidebar {
+        display: flex;
+        position: fixed; top: 56px; left: 0;
+        width: 300px; height: calc(100dvh - 56px); z-index: 200;
+        border-right: 1px solid var(--border);
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        box-shadow: 4px 0 12px rgba(0,0,0,0.2);
+      }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-close { display: block; }
+      .sidebar-content { padding: 1.5rem 1rem 3rem; }
+      .doc-breadcrumb { display: flex; }
+      .docs-layout { flex-direction: column; }
+      .sidebar-content th,
+      .sidebar-content td {
+        padding: 0.5rem 0.5rem;
+        font-size: 0.78rem;
+      }
+    }
+  </style>
+  <script>
+    (function () {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+</head>
+<body>
+    <nav aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g clip-path="url(#navclip)">
+            <rect x="220.935" y="157" width="130.495" height="144.914" transform="rotate(24.4305 220.935 157)" fill="var(--accent)"/>
+            <path d="M225.366 184.462L252.513 215.691L175.768 282.404L274.323 323.227L247.177 291.998L323.922 225.285L225.366 184.462ZM34.2623 47.0682L425.538 208.62L323.484 297.334L465.427 460.621L74.1511 299.069L176.205 210.355L34.2623 47.0682Z" fill="var(--text)" shape-rendering="crispEdges"/>
+          </g>
+          <defs>
+            <clipPath id="navclip"><rect width="500" height="500" rx="80"/></clipPath>
+          </defs>
+        </svg>
+        zing
+      </a>
+      <div class="nav-right">
+        <ul class="nav-links">
+          <li><a href="/features">Features</a></li>
+          <li><a href="/downloads">Downloads</a></li>
+          <li class="nav-docs"><a href="/docs/" style="color:var(--accent)">Docs</a></li>
+          <li class="nav-docs-icon"><a href="/docs/" style="color:var(--accent)" title="Docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></a></li>
+          <li><a href="https://github.com/TharukRenuja/zing" rel="noopener noreferrer" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></a></li>
+        </ul>
+        <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+          <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="nav-overlay" id="sidebar-overlay"></div>
+
+  <div class="doc-breadcrumb" id="sidebar-toggle" role="button" tabindex="0" aria-label="Toggle docs navigation">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0">
+      <rect x="3" y="3" width="18" height="18" rx="2"/>
+      <line x1="9" y1="3" x2="9" y2="21"/>
+    </svg>
+    <span>Docs</span><span class="bc-sep">/</span><span class="bc-section">Guides</span><span class="bc-sep">/</span><span class="bc-label">Daemon</span>
+  </div>
+
+  <div class="docs-layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <button class="sidebar-close" id="sidebar-close" aria-label="Close sidebar">&times;</button>
+<div class="sidebar-group">
+<div class="sidebar-heading">Guides</div>
+<a href="daemon.html" class="sidebar-link active">Daemon</a>
+<a href="tui.html" class="sidebar-link">Terminal UI (TUI)</a>
+<a href="gui.html" class="sidebar-link">Desktop GUI</a>
+<a href="pipe-mode.html" class="sidebar-link">Pipe Mode</a>
+<a href="browser-extension.html" class="sidebar-link">Browser Extension</a>
+</div>
+<div class="sidebar-group">
+<div class="sidebar-heading">Reference</div>
+<a href="cli.html" class="sidebar-link">CLI Reference</a>
+<a href="config.html" class="sidebar-link">Configuration</a>
+</div>
+      </div>
+    </aside>
+    <div class="sidebar-content">
+<h1 id="daemon">Daemon</h1>
+<p>The <code>zing-daemon</code> background process handles downloads that continue after the terminal closes. Any <code>zing download</code> command automatically detects the daemon and proxies through it.</p>
+<h2 id="quick-start">Quick start</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>zing daemon start      # start in foreground
+zing daemon stop       # stop
+zing daemon restart    # restart
+zing daemon status     # show systemd status (Linux)
+
+# Or as a systemd user service
+zing daemon install
+zing daemon uninstall
+</code></pre></div>
+<h2 id="how-it-works">How it works</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>CLI (zing)                    Daemon (zing-daemon)
+    │                               │
+    ├── zing.addUri ──────────────► │ spawns download worker
+    ├── zing.list ────────────────► │ returns all tasks
+    ├── zing.tellStatus {id} ────► │ returns task snapshot
+    ├── zing.pause {id} ─────────► │ pauses the download
+    ├── zing.resume {id} ────────► │ resumes the download
+    ├── zing.stop {id} ──────────► │ stops the download
+    ├── zing.remove {id} ────────► │ removes + cleans up files
+    ├── zing.setMaxConcurrent ───► │ adjusts concurrency limit
+    ├── zing.subscribe ──────────► │ streams events (long-lived)
+    └── zing.shutdown ───────────► │ graceful shutdown
+</code></pre></div>
+<h2 id="authentication">Authentication</h2>
+<p>Each daemon start generates a random 32-byte hex token, written to a file next to the socket (or <code>%PROGRAMDATA%\zing\auth.token</code> on Windows). The CLI reads this file automatically — no manual pairing required.</p>
+<p>The token is: - Generated once per daemon lifetime - Stored with <code>0o600</code> permissions (owner-only read/write) - Never logged or displayed to the user - Rotated on each daemon restart</p>
+<h2 id="task-lifecycle">Task lifecycle</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>   addUri
+      │
+      ▼
+   Pending ──(worker starts)──► Downloading
+                                  │    ▲
+                   pause ─────────┘    │ resume
+                                  │    │
+                                  ▼    │
+                               Paused ─┘
+                                  │
+                   stop ─────────►│
+                   error ────────►│
+                                  ▼
+                          Completed / Failed / Stopped
+                                  │
+                       remove ────┘
+                                  ▼
+                              (deleted)
+</code></pre></div>
+<h2 id="session-persistence">Session persistence</h2>
+<p>The daemon saves active tasks to <code>~/.config/zing/session.json</code>. On restart, tasks are restored:</p>
+<ul>
+<li><strong>Downloading/Pending</strong> tasks: respawned automatically
+</li>
+<li><strong>Paused</strong> tasks: stay paused, resumed on <code>zing resume <id></code>
+</li>
+<li><strong>Completed/Failed/Stopped</strong> tasks: not restored
+</li>
+</ul>
+<p>The session file is updated on every task state change.</p>
+<h2 id="scheduled-downloads">Scheduled downloads</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code># Add a schedule
+zing schedule add https://example.com/file.zip --at 02:00
+zing schedule add https://example.com/daily.zip --at 00:00 --end 07:00 --days Mon,Wed,Fri
+
+# List schedules
+zing schedule list
+
+# Remove a schedule
+zing schedule remove <id>
+</code></pre></div>
+<p>Schedules are stored in <code>~/.config/zing/schedule.json</code>. The scheduler checks every 30 seconds and triggers downloads when the current time matches. Each schedule entry can specify:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr><th>Field</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>url</code></td><td>URL to download</td></tr>
+<tr><td><code>at</code></td><td>Start time (<code>HH:MM</code>)</td></tr>
+<tr><td><code>end</code></td><td>End time window (<code>HH:MM</code>, optional)</td></tr>
+<tr><td><code>days</code></td><td>Day filter (e.g. <code>Mon,Wed,Fri</code>, default: every day)</td></tr>
+<tr><td><code>output</code></td><td>Output filename</td></tr>
+<tr><td><code>output_dir</code></td><td>Output directory</td></tr>
+<tr><td><code>connections</code></td><td>Max connections (default: 4)</td></tr>
+<tr><td><code>insecure</code></td><td>Skip TLS verification</td></tr>
+<tr><td><code>max_download_rate</code></td><td>Rate limit</td></tr>
+<tr><td><code>proxy</code></td><td>Proxy URL</td></tr>
+<tr><td><code>headers</code></td><td>Custom headers</td></tr>
+<tr><td><code>checksum</code></td><td>Verify checksum</td></tr>
+<tr><td><code>mirrors</code></td><td>Mirror URLs</td></tr>
+<tr><td><code>max_filesize</code></td><td>Max file size</td></tr>
+</tbody>
+</table></div>
+<h2 id="concurrency-control">Concurrency control</h2>
+<p>The daemon uses a <code>tokio::sync::Semaphore</code> to limit concurrent downloads. Default: 3 (from <code>max_concurrent_downloads</code> config key). Change at runtime:</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>zing config set max_concurrent_downloads 8
+</code></pre></div>
+<p>Or via RPC: <code>zing.setMaxConcurrent { "max": 8 }</code>.</p>
+<h2 id="rpc-protocol">RPC protocol</h2>
+<p>Communication uses newline-delimited JSON over Unix sockets (Linux) or TCP (Windows).</p>
+<h3 id="request-format">Request format</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{
+  "id": 1,
+  "method": "zing.addUri",
+  "params": { "url": "https://..." },
+  "token": "abc123..."
+}
+</code></pre></div>
+<h3 id="response-format">Response format</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{
+  "id": 1,
+  "result": { "id": 42 },
+  "error": null
+}
+</code></pre></div>
+<h3 id="error-response">Error response</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{
+  "id": 1,
+  "result": null,
+  "error": { "code": -32000, "message": "task not found" }
+}
+</code></pre></div>
+<h3 id="methods">Methods</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr><th>Method</th><th>Params</th><th>Returns</th></tr>
+</thead>
+<tbody>
+<tr><td><code>zing.addUri</code></td><td><code>{ url, filename?, dir?, connections?, ... }</code></td><td><code>{ id }</code></td></tr>
+<tr><td><code>zing.list</code></td><td>—</td><td><code>{ tasks: [...] }</code></td></tr>
+<tr><td><code>zing.tellStatus</code></td><td><code>{ id }</code></td><td>task snapshot</td></tr>
+<tr><td><code>zing.pause</code></td><td><code>{ id }</code></td><td><code>{ id, status: "paused" }</code></td></tr>
+<tr><td><code>zing.resume</code></td><td><code>{ id }</code></td><td><code>{ id, status: "resumed" }</code></td></tr>
+<tr><td><code>zing.stop</code></td><td><code>{ id }</code></td><td><code>{ ok: true }</code></td></tr>
+<tr><td><code>zing.remove</code></td><td><code>{ id }</code></td><td><code>{ ok: true }</code></td></tr>
+<tr><td><code>zing.setMaxConcurrent</code></td><td><code>{ max }</code></td><td><code>{ ok: true }</code></td></tr>
+<tr><td><code>zing.version</code></td><td>—</td><td>version string</td></tr>
+<tr><td><code>zing.shutdown</code></td><td>—</td><td><code>{ status: "shutting_down" }</code></td></tr>
+<tr><td><code>zing.subscribe</code></td><td>—</td><td>event stream (long-lived)</td></tr>
+</tbody>
+</table></div>
+<h3 id="event-stream">Event stream</h3>
+<p><code>zing.subscribe</code> opens a long-lived connection. Each event is a JSON line:</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>{"TaskCreated": {"id": 1, "url": "https://..."}}
+{"TaskProgress": {"id": 1, "bytes_downloaded": 1048576, "total_bytes": 10485760, "speed_bytes_per_sec": 524288}}
+{"TaskCompleted": {"id": 1, "total_bytes": 10485760, "duration": "12s"}}
+</code></pre></div>
+<p>Events include: <code>TaskCreated</code>, <code>TaskProgress</code>, <code>TaskCompleted</code>, <code>TaskFailed</code>, <code>Paused</code>, <code>ConnectionCreated</code>.</p>
+<h2 id="platform-differences">Platform differences</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr><th>Feature</th><th>Linux/macOS</th><th>Windows</th></tr>
+</thead>
+<tbody>
+<tr><td>Transport</td><td>Unix domain socket</td><td>TCP on <code>127.0.0.1</code></td></tr>
+<tr><td>Socket path</td><td><code>$XDG_RUNTIME_DIR/zing.sock</code></td><td><code>%PROGRAMDATA%\zing\daemon.port</code></td></tr>
+<tr><td>Auth token</td><td><code><socket>.auth</code></td><td><code>%PROGRAMDATA%\zing\auth.token</code></td></tr>
+<tr><td>Service</td><td>systemd user service</td><td>Windows service</td></tr>
+</tbody>
+</table></div>
+<h2 id="event-hooks">Event hooks</h2>
+<p>The daemon runs hooks on download completion/failure:</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code># In session.json or via addUri params:
+{
+  "on_download_complete": "notify-send 'Done: {}'",
+  "on_download_error": "echo 'Failed: {}' >> ~/failures.log"
+}
+</code></pre></div>
+<p><code>{}</code> is replaced with the file path.</p>
+<div class="doc-nav-buttons"><a href="tui.html" class="doc-nav-btn doc-nav-next">Terminal UI (TUI) →</a></div>
+      <p class="doc-copyright">&copy; 2026 zing &middot; <a href="https://github.com/TharukRenuja/zing/blob/main/LICENSE" rel="noopener noreferrer">AGPL-3.0</a> &middot; <a href="https://www.rust-lang.org" rel="noopener noreferrer">Built with Rust</a></p>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const themeToggle = document.getElementById('theme-toggle');
+      const sunIcon = themeToggle.querySelector('.sun-icon');
+      const moonIcon = themeToggle.querySelector('.moon-icon');
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
+      function updateIcons(theme) {
+        sunIcon.style.display = theme === 'light' ? 'none' : 'block';
+        moonIcon.style.display = theme === 'light' ? 'block' : 'none';
+      }
+      function getEffectiveTheme() {
+        const saved = localStorage.getItem('theme');
+        if (saved) return saved;
+        return mediaQuery.matches ? 'light' : 'dark';
+      }
+      function applyTheme(theme) {
+        if (theme === 'system') {
+          document.documentElement.removeAttribute('data-theme');
+          updateIcons(mediaQuery.matches ? 'light' : 'dark');
+        } else {
+          document.documentElement.setAttribute('data-theme', theme);
+          updateIcons(theme);
+        }
+      }
+      applyTheme(getEffectiveTheme());
+      mediaQuery.addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) applyTheme(e.matches ? 'light' : 'dark');
+      });
+      themeToggle.addEventListener('click', () => {
+        const currentTheme = getEffectiveTheme();
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('theme', newTheme);
+        applyTheme(newTheme);
+      });
+      const sidebarToggle = document.getElementById('sidebar-toggle');
+      const sidebar = document.getElementById('sidebar');
+      const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+      function openSidebar() {
+        sidebar.classList.add('open');
+        sidebarOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeSidebar() {
+        sidebar.classList.remove('open');
+        sidebarOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (sidebar.classList.contains('open')) closeSidebar();
+          else openSidebar();
+        });
+      }
+
+      if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeSidebar);
+      }
+
+      const sidebarClose = document.getElementById('sidebar-close');
+      if (sidebarClose) {
+        sidebarClose.addEventListener('click', closeSidebar);
+      }
+
+      if (sidebar) {
+        sidebar.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', closeSidebar);
+        });
+      }
+    })();
+    function copyCode(btn) {
+      const code = btn.parentElement.querySelector('pre code');
+      const text = code.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+        setTimeout(() => { btn.innerHTML = orig; }, 1500);
+      }).catch(() => {});
+    }
+  </script>
+</body>
+</html>

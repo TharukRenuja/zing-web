@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="How zing downloads files — segmented concurrent downloads, server probing, adaptive connection count, end-game mode, retry, rate limiting, Metalink, resume, and storage I/O.">
+  <meta name="keywords" content="zing, download, engine, segmented, probing, adaptive, end-game, retry, rate limit, metalink, resume, pwrite, bitfield">
+  <title>Download Engine - zing Docs</title>
+  <meta property="og:title" content="Download Engine - zing Docs">
+  <meta property="og:description" content="How zing downloads files — segmented concurrent downloads, server probing, adaptive connection count, end-game mode, retry, rate limiting, Metalink, resume, and storage I/O.">
+  <meta property="og:url" content="https://zing.tharuk.pro/docs/download-engine.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Download Engine - zing Docs">
+  <meta name="twitter:description" content="How zing downloads files — segmented concurrent downloads, server probing, adaptive connection count, end-game mode, retry, rate limiting, Metalink, resume, and storage I/O.">
+  <link rel="canonical" href="https://zing.tharuk.pro/docs/download-engine.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/assets/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/favicon.ico">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    .docs-layout {
+      display: flex; min-height: calc(100vh - 56px);
+    }
+    .sidebar {
+      width: 300px; flex-shrink: 0;
+      border-right: 1px solid var(--border);
+      background: var(--bg-elevated);
+      overflow-y: auto;
+      position: sticky; top: 56px; height: calc(100vh - 56px);
+    }
+    .sidebar-inner {
+      padding: 0;
+      position: relative;
+      width: 100%;
+      min-width: 0;
+    }
+    .sidebar-group {
+      margin-bottom: 0;
+    }
+    .sidebar-heading {
+      font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--muted); padding: 1rem 1rem 0.25rem;
+    }
+    .sidebar-link {
+      display: block; padding: 0.5rem 1rem;
+      font-size: 0.9rem; color: var(--muted);
+      text-decoration: none; border-radius: 0;
+      transition: all 0.1s;
+    }
+    .sidebar-link:hover {
+      color: var(--text); background: var(--bg-card);
+    }
+    .sidebar-link.active {
+      color: var(--accent); background: rgba(79,142,247,0.08);
+      font-weight: 600;
+    }
+    .sidebar-content {
+      flex: 1; min-width: 0;
+      padding: 2rem 2rem 4rem;
+      max-width: none;
+    }
+    .sidebar-content h1 {
+      font-family: var(--mono); font-size: clamp(1.5rem, 2.5vw, 2rem);
+      font-weight: 700; letter-spacing: -0.03em; color: var(--text);
+      margin-bottom: 1.5rem; padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-content h2 {
+      font-family: var(--mono); font-size: 1.25rem; font-weight: 700;
+      color: var(--text); margin: 2rem 0 0.75rem;
+      letter-spacing: -0.02em;
+    }
+    .sidebar-content h2:target {
+      border-left: 3px solid var(--accent);
+      padding-left: 0.75rem;
+    }
+    .sidebar-content h3 {
+      font-family: var(--mono); font-size: 1rem; font-weight: 600;
+      color: var(--accent); margin: 1.5rem 0 0.5rem;
+    }
+    .sidebar-content h3:target {
+      border-left: 2px solid var(--accent);
+      padding-left: 0.5rem;
+    }
+    .sidebar-content p {
+      color: var(--muted); line-height: 1.7; margin-bottom: 1rem;
+    }
+    .sidebar-content strong { color: var(--text); }
+    .sidebar-content a {
+      color: var(--accent); text-decoration: none;
+      word-break: break-word; overflow-wrap: anywhere;
+    }
+    .sidebar-content a:hover { text-decoration: underline; }
+    .sidebar-content code {
+      font-family: var(--mono); font-size: 0.82rem;
+      background: var(--bg-card); padding: 0.15rem 0.4rem;
+      border-radius: 4px; color: var(--accent);
+      word-break: break-word; overflow-wrap: anywhere;
+    }
+    .sidebar-content pre {
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1rem; overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    .sidebar-content pre code {
+      background: none; padding: 0; font-size: 0.78rem;
+      color: var(--text); line-height: 1.6;
+    }
+    .code-block {
+      position: relative;
+    }
+    .code-block:hover .copy-btn {
+      opacity: 1;
+    }
+    .copy-btn {
+      position: absolute; top: 0.5rem; right: 0.5rem;
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--muted); font-size: 0.7rem;
+      font-family: var(--sans); padding: 0.2rem 0.5rem;
+      border-radius: 4px; cursor: pointer;
+      opacity: 0; transition: opacity 0.15s; z-index: 1;
+      display: inline-flex; align-items: center; gap: 0.25rem;
+    }
+    .copy-btn:hover {
+      color: var(--accent); border-color: var(--accent);
+    }
+    @media (max-width: 768px) {
+      .copy-btn { opacity: 1; }
+    }
+    .sidebar-content ul, .sidebar-content ol {
+      color: var(--muted); line-height: 1.7;
+      margin-bottom: 1rem; padding-left: 1.25rem;
+    }
+    .sidebar-content li { margin-bottom: 0.25rem; }
+    .sidebar-content li > .code-block { margin-top: 0.5rem; }
+    .sidebar-content blockquote {
+      border-left: 3px solid var(--accent); background: var(--bg-card);
+      padding: 0.75rem 1rem; margin-bottom: 1rem;
+      border-radius: 0 6px 6px 0;
+      color: var(--text); font-size: 0.9rem;
+    }
+    .sidebar-content blockquote p { color: var(--text); margin-bottom: 0; }
+    .sidebar-content hr {
+      border: none; border-top: 1px solid var(--border); margin: 2rem 0;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 1.5rem;
+    }
+    .table-wrap table {
+      width: max-content;
+      min-width: 100%;
+      margin-bottom: 0;
+    }
+    .sidebar-content table {
+      width: max-content; min-width: 100%;
+      border-collapse: collapse; font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    .sidebar-content th {
+      font-family: var(--mono); font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 0.75rem 1rem; text-align: left; color: var(--muted);
+      border-bottom: 1px solid var(--border); background: var(--bg-card);
+      white-space: nowrap;
+    }
+    .sidebar-content td {
+      padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);
+      color: var(--muted);
+      white-space: normal; word-break: normal;
+      overflow-wrap: break-word; max-width: 300px;
+    }
+    .sidebar-content img {
+      max-width: 100%; border-radius: 8px; border: 1px solid var(--border);
+      margin: 1rem 0;
+    }
+    .sidebar-content details {
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1rem; margin-bottom: 1rem;
+    }
+    .sidebar-content summary {
+      font-family: var(--mono); font-size: 0.85rem;
+      cursor: pointer; color: var(--accent);
+    }
+    .callout {
+      border-left: 4px solid var(--accent);
+      background: var(--bg-card); padding: 0.75rem 1rem;
+      margin-bottom: 1rem; border-radius: 0 6px 6px 0;
+      font-size: 0.9rem; color: var(--text);
+    }
+    .callout-title {
+      font-family: var(--mono); font-size: 0.72rem;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      display: block; margin-bottom: 0.25rem;
+    }
+    .callout-note { border-left-color: var(--accent); }
+    .callout-note .callout-title { color: var(--accent); }
+    .callout-tip { border-left-color: var(--green); }
+    .callout-tip .callout-title { color: var(--green); }
+    .callout-warning { border-left-color: #f59e0b; }
+    .callout-warning .callout-title { color: #f59e0b; }
+    .callout-caution { border-left-color: #f59e0b; }
+    .callout-caution .callout-title { color: #f59e0b; }
+    .callout-important { border-left-color: #ef4444; }
+    .callout-important .callout-title { color: #ef4444; }
+    .doc-nav-buttons {
+      display: flex; justify-content: space-between; gap: 1rem;
+      margin: 2rem 0 1rem;
+    }
+    .doc-nav-btn {
+      padding: 0.5rem 1rem; border-radius: 8px;
+      font-family: var(--sans); font-size: 0.82rem; font-weight: 500;
+      text-decoration: none; color: var(--muted);
+      border: 1px solid var(--border);
+      transition: all 0.15s; max-width: 50%;
+    }
+    .doc-nav-btn:hover {
+      color: var(--text); border-color: var(--muted);
+    }
+    .doc-nav-next {
+      margin-left: auto; text-align: right;
+    }
+    .doc-nav-prev {
+      text-align: left;
+    }
+    .doc-copyright {
+      font-size: 0.78rem; color: var(--border-hover);
+      padding-top: 1rem; border-top: 1px solid var(--border);
+      margin-top: 1.5rem; text-align: center;
+    }
+    .doc-copyright a {
+      color: var(--border-hover); text-decoration: none;
+    }
+    .doc-copyright a:hover {
+      color: var(--muted);
+    }
+    .nav-overlay {
+      display: none; position: fixed;
+      top: 56px; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5); z-index: 199;
+    }
+    .nav-overlay.active { display: block; }
+
+    .sidebar-close {
+      display: none;
+      position: absolute; top: 0.5rem; right: 1rem;
+      background: none; border: none;
+      color: var(--muted); font-size: 1.5rem;
+      cursor: pointer; padding: 0.25rem 0.5rem;
+      line-height: 1; border-radius: 4px;
+    }
+    .sidebar-close:hover {
+      color: var(--text); background: var(--bg-card);
+    }
+
+    .doc-breadcrumb {
+      display: none;
+      position: sticky;
+      top: 56px;
+      z-index: 50;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border);
+      font-size: 0.78rem;
+      color: var(--muted);
+      user-select: none;
+      cursor: pointer;
+    }
+    .doc-breadcrumb .bc-sep {
+      color: var(--border-hover);
+    }
+    .doc-breadcrumb .bc-section {
+      color: var(--text);
+    }
+    .doc-breadcrumb .bc-label {
+      color: var(--accent);
+    }
+    @media (max-width: 768px) {
+      .sidebar {
+        display: flex;
+        position: fixed; top: 56px; left: 0;
+        width: 300px; height: calc(100dvh - 56px); z-index: 200;
+        border-right: 1px solid var(--border);
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        box-shadow: 4px 0 12px rgba(0,0,0,0.2);
+      }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-close { display: block; }
+      .sidebar-content { padding: 1.5rem 1rem 3rem; }
+      .doc-breadcrumb { display: flex; }
+      .docs-layout { flex-direction: column; }
+      .sidebar-content th,
+      .sidebar-content td {
+        padding: 0.5rem 0.5rem;
+        font-size: 0.78rem;
+      }
+    }
+  </style>
+  <script>
+    (function () {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+</head>
+<body>
+    <nav aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g clip-path="url(#navclip)">
+            <rect x="220.935" y="157" width="130.495" height="144.914" transform="rotate(24.4305 220.935 157)" fill="var(--accent)"/>
+            <path d="M225.366 184.462L252.513 215.691L175.768 282.404L274.323 323.227L247.177 291.998L323.922 225.285L225.366 184.462ZM34.2623 47.0682L425.538 208.62L323.484 297.334L465.427 460.621L74.1511 299.069L176.205 210.355L34.2623 47.0682Z" fill="var(--text)" shape-rendering="crispEdges"/>
+          </g>
+          <defs>
+            <clipPath id="navclip"><rect width="500" height="500" rx="80"/></clipPath>
+          </defs>
+        </svg>
+        zing
+      </a>
+      <div class="nav-right">
+        <ul class="nav-links">
+          <li><a href="/features">Features</a></li>
+          <li><a href="/downloads">Downloads</a></li>
+          <li class="nav-docs"><a href="/docs/" style="color:var(--accent)">Docs</a></li>
+          <li class="nav-docs-icon"><a href="/docs/" style="color:var(--accent)" title="Docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></a></li>
+          <li><a href="https://github.com/TharukRenuja/zing" rel="noopener noreferrer" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></a></li>
+        </ul>
+        <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+          <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="nav-overlay" id="sidebar-overlay"></div>
+
+  <div class="doc-breadcrumb" id="sidebar-toggle" role="button" tabindex="0" aria-label="Toggle docs navigation">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0">
+      <rect x="3" y="3" width="18" height="18" rx="2"/>
+      <line x1="9" y1="3" x2="9" y2="21"/>
+    </svg>
+    <span>Docs</span><span class="bc-sep">/</span><span class="bc-section">Internals</span><span class="bc-sep">/</span><span class="bc-label">Download Engine</span>
+  </div>
+
+  <div class="docs-layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <button class="sidebar-close" id="sidebar-close" aria-label="Close sidebar">&times;</button>
+<div class="sidebar-group">
+<div class="sidebar-heading">Guides</div>
+<a href="daemon.html" class="sidebar-link">Daemon</a>
+<a href="tui.html" class="sidebar-link">Terminal UI (TUI)</a>
+<a href="gui.html" class="sidebar-link">Desktop GUI</a>
+<a href="pipe-mode.html" class="sidebar-link">Pipe Mode</a>
+<a href="browser-extension.html" class="sidebar-link">Browser Extension</a>
+</div>
+<div class="sidebar-group">
+<div class="sidebar-heading">Reference</div>
+<a href="cli.html" class="sidebar-link">CLI Reference</a>
+<a href="config.html" class="sidebar-link">Configuration</a>
+</div>
+      </div>
+    </aside>
+    <div class="sidebar-content">
+<h1 id="download-engine">Download Engine</h1>
+<p>The download engine (<code>zing-core</code>) handles the core logic of fetching files over HTTP. It supports segmented concurrent downloads, server probing, adaptive connection tuning, and resume.</p>
+<h2 id="how-a-download-works">How a download works</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>1. Probe the server
+   ├── HEAD/GET Range: bytes=0-65535
+   ├── Detect protocol (HTTP/1.1, HTTP/2, HTTP/3)
+   ├── Measure RTT and bandwidth
+   ├── Check range support and total file size
+   └── Decide: streaming vs segmented, connection count
+
+2. Resolve conflict (if file exists)
+   ├── Overwrite (default)
+   ├── Auto-rename (file-1.ext, file-2.ext, ...)
+   └── Ask (interactive callback)
+
+3. Resume check
+   ├── Load .zing control file if it exists
+   ├── Verify bitfield against actual file on disk
+   └── Skip completed blocks
+
+4. Download
+   ├── Segmented: multiple connections, each downloads a range
+   │   ├── Adaptive: small files use 1 connection, large files measure then decide
+   │   ├── Work stealing: fast connections take work from slow ones
+   │   └── End-game: all connections race for remaining blocks
+   └── Streaming: single connection for unknown-size servers
+
+5. Verify (optional)
+   ├── Checksum (MD5/SHA-1/SHA-256/SHA-512, auto-detected by length)
+   └── Metalink per-block hash validation
+
+6. Cleanup
+   ├── Remove .zing control file
+   └── Run on-download-complete hook
+</code></pre></div>
+<h2 id="segmented-downloads">Segmented downloads</h2>
+<p>The engine splits a file into byte-range segments, each assigned to a connection. As a connection finishes its segment, it claims the next pending one.</p>
+<h3 id="segment-sizes">Segment sizes</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr><th>Constant</th><th>Value</th><th>Purpose</th></tr>
+</thead>
+<tbody>
+<tr><td><code>SEGMENT_MIN_SIZE</code></td><td>512 KiB</td><td>Legacy minimum; used for initial split only</td></tr>
+<tr><td><code>MIN_SEGMENT_BYTES</code></td><td>4 MiB</td><td>Dynamic minimum after adaptive count is determined</td></tr>
+<tr><td><code>SMALL_FILE_THRESHOLD</code></td><td>200 MiB</td><td>Files below this use 1 connection, skip measurement</td></tr>
+</tbody>
+</table></div>
+<h3 id="adaptive-connection-spawning">Adaptive connection spawning</h3>
+<p>Files are split into two categories based on size:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr><th>Threshold</th><th>Behavior</th></tr>
+</thead>
+<tbody>
+<tr><td>< 200 MiB (<code>SMALL_FILE_THRESHOLD</code>)</td><td>1 connection, no measurement, no delays</td></tr>
+<tr><td>≥ 200 MiB</td><td>Measure real speed, then calculate optimal count</td></tr>
+</tbody>
+</table></div>
+<p>For large files:</p>
+<ol>
+<li>Spawn connection 0 with the entire file
+</li>
+<li>Wait 3 seconds (<code>MEASURE_DURATION_SECS</code>) to measure real per-connection speed
+</li>
+<li>Calculate: <code>optimal = ceil(probe_bandwidth / measured_speed)</code>, capped at max_connections
+</li>
+<li>If single connection already at 80%+ of probe bandwidth (<code>SINGLE_CONN_THRESHOLD</code>) → stay at 1
+</li>
+<li>Spawn remaining connections in one shot (no batch delays)
+</li>
+</ol>
+<p>Dynamic minimum segment size: <code>max(4 MiB, total_size / optimal_connections)</code> replaces the fixed 512 KiB floor. This ensures segments are large enough to be meaningful while still allowing work stealing between connections.</p>
+<h2 id="work-stealing">Work stealing</h2>
+<p>When a fast connection finishes its segment early, it can "steal" remaining work from the slowest connection. This happens when:</p>
+<ol>
+<li>The fast connection will finish its current segment in < 3 seconds
+</li>
+<li>The slow connection has ≥ <code>min_segment_size</code> remaining (dynamic: <code>max(4 MiB, total/conns)</code>)
+</li>
+</ol>
+<p>The slow connection's segment is split: the completed portion is marked done, and the remaining bytes become a new pending segment for the fast connection.</p>
+<h2 id="end-game-mode">End-game mode</h2>
+<p>When remaining blocks drop below a threshold (≤ 8 blocks or ≤ <code>2 × num_connections</code>), all connections stop taking sequential segments and instead race to download individual blocks. Each block is claimed atomically — a connection skips a block if another connection already completed it.</p>
+<p>This minimizes tail latency when connections have varying speeds.</p>
+<h2 id="server-probing">Server probing</h2>
+<p>The probe sends <code>GET Range: bytes=0-65535</code> and analyzes the response:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr><th>Check</th><th>What it determines</th></tr>
+</thead>
+<tbody>
+<tr><td>Response status</td><td>206 = range support; 200 = no range support</td></tr>
+<tr><td><code>Content-Range</code> header</td><td>Total file size</td></tr>
+<tr><td><code>Content-Type</code> / protocol version</td><td>HTTP/1.1, HTTP/2, or HTTP/3</td></tr>
+<tr><td>Download time of 64 KiB</td><td>Bandwidth estimate</td></tr>
+</tbody>
+</table></div>
+<p>The <code>decide_strategy</code> heuristic then picks: - <strong>Streaming mode</strong> if no size or no range support - <strong>1 connection</strong> if file is small (< 200 MiB) - <strong>N connections</strong> based on measured speed vs probe bandwidth</p>
+<h3 id="mirror-probing">Mirror probing</h3>
+<p><code>probe_mirrors</code> sends HEAD requests to all mirror URLs, measures RTT, and returns them sorted fastest-first. The download engine tries mirrors in order on failure.</p>
+<h2 id="rate-limiting">Rate limiting</h2>
+<p>A lock-free token-bucket rate limiter (<code>TokenBucket</code>) controls download speed:</p>
+<ul>
+<li>Capacity = <code>max(bytes_per_sec, 65536)</code>
+</li>
+<li>Refill every 10 ms
+</li>
+<li>Connections call <code>consume(amount)</code> which async-blocks until tokens are available
+</li>
+<li>The bandwidth scheduler can call <code>set_rate()</code> at scheduled times to change the limit dynamically
+</li>
+</ul>
+<h2 id="bandwidth-scheduling">Bandwidth scheduling</h2>
+<p>The <code>--bwlimit</code> flag accepts a time-of-day schedule:</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>"08:00,500KB 18:00,2MB"
+</code></pre></div>
+<p>A background task sleeps until each transition point, then calls <code>TokenBucket::set_rate()</code>. The initial rate is set from the first entry.</p>
+<h2 id="retry-and-backoff">Retry and backoff</h2>
+<p>Failed connections retry with exponential backoff + jitter:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr><th>Parameter</th><th>Default</th></tr>
+</thead>
+<tbody>
+<tr><td>Max retries</td><td>5</td></tr>
+<tr><td>Base delay</td><td>500 ms</td></tr>
+<tr><td>Max delay</td><td>10 s</td></tr>
+<tr><td>Jitter</td><td>±10%</td></tr>
+</tbody>
+</table></div>
+<p>After exhausting retries on one URL, the engine rotates to the next mirror (if available).</p>
+<h3 id="retryable-errors">Retryable errors</h3>
+<ul>
+<li>I/O errors (timeout, connection reset, broken pipe)
+</li>
+<li>HTTP 408, 429, 5xx
+</li>
+<li>reqwest connection/timeout errors
+</li>
+<li>Metalink hash mismatch (re-downloads the block)
+</li>
+</ul>
+<h2 id="resume">Resume</h2>
+<p>State is saved to a <code>.zing</code> control file (binary format):</p>
+<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>Magic:   0x5A49 ("ZI")
+Version: u16 (currently 2)
+Total:   u64 (file size)
+Block size: u32 (64 KiB)
+Num blocks: u32
+Bitfield length: u32
+Bitfield: [N bytes]  (1 bit per block, 1 = complete)
+</code></pre></div>
+<p>The control file is saved periodically (every 2-5 seconds) and on clean shutdown. On resume, the engine verifies each bit against the actual file on disk using <code>read_at</code>.</p>
+<h3 id="block-bitfield">Block bitfield</h3>
+<p>Each bit represents a 64 KiB block. <code>missing_ranges()</code> coalesces consecutive incomplete blocks into <code>(offset, length)</code> ranges for efficient gap-filling.</p>
+<h2 id="storage-io">Storage I/O</h2>
+<p>All disk I/O uses position-based writes (<code>pwrite</code>/<code>pread</code>) to avoid seek+read races between concurrent connections:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr><th>Function</th><th>Platform</th><th>Syscall</th></tr>
+</thead>
+<tbody>
+<tr><td><code>write_at</code></td><td>Unix</td><td><code>pwrite</code></td></tr>
+<tr><td><code>write_at</code></td><td>Windows</td><td><code>seek_write</code></td></tr>
+<tr><td><code>read_at</code></td><td>Unix</td><td><code>pread</code></td></tr>
+<tr><td><code>read_at</code></td><td>Windows</td><td><code>seek_read</code></td></tr>
+<tr><td><code>preallocate</code></td><td>Linux</td><td><code>fallocate</code> (fallback: <code>set_len</code>)</td></tr>
+<tr><td><code>preallocate</code></td><td>macOS</td><td><code>F_PREALLOCATE</code> (fallback: <code>set_len</code>)</td></tr>
+</tbody>
+</table></div>
+<h2 id="connection-pool">Connection pool</h2>
+<p>The <code>ConnectionPool</code> wraps <code>reqwest::Client</code> with:</p>
+<ul>
+<li>Protocol detection (H1/H2/H3) from response version
+</li>
+<li>Custom headers, proxy, TLS client certificates
+</li>
+<li>DNS overrides
+</li>
+<li>Cookie jar support (Netscape format)
+</li>
+<li>Request metrics (total requests, H2 streams created)
+</li>
+<li>Event emission (<code>ConnectionCreated</code>, <code>ConnectionClosed</code>)
+</li>
+</ul>
+<h3 id="happy-eyeballs-dns">Happy Eyeballs DNS</h3>
+<p><code>resolve_host</code> queries the system resolver and returns IPv6 addresses first, then IPv4, preserving system order within each family. This follows RFC 8305 Happy Eyeballs for preferring IPv6.</p>
+<h2 id="metalink-support">Metalink support</h2>
+<p><code>.meta4</code> files provide: - Multiple mirror URLs (tried in RTT-sorted order) - Per-file checksums (MD5, SHA-1, SHA-256, SHA-512) - Per-block hash validation during download (64 KiB pieces)</p>
+<p>The engine validates each block's hash as it's written to disk. A mismatch causes that block to be re-downloaded.</p>
+<h2 id="throttle-detection">Throttle detection</h2>
+<p>When <code>--throttle-reprobe</code> is enabled, if a connection's speed drops below the threshold for too long, the engine:</p>
+<ol>
+<li>Re-probes the server to check if bandwidth has changed
+</li>
+<li>If the probe shows better speed, fails over to a mirror
+</li>
+<li>Logs the reprobe result
+</li>
+</ol>
+<p>This handles cases where the ISP or server throttles after detecting bulk transfers.</p>
+<div class="doc-nav-buttons"><a href="installation.html" class="doc-nav-btn doc-nav-prev">← Installation</a><a href="architecture.html" class="doc-nav-btn doc-nav-next">Architecture →</a></div>
+      <p class="doc-copyright">&copy; 2026 zing &middot; <a href="https://github.com/TharukRenuja/zing/blob/main/LICENSE" rel="noopener noreferrer">AGPL-3.0</a> &middot; <a href="https://www.rust-lang.org" rel="noopener noreferrer">Built with Rust</a></p>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const themeToggle = document.getElementById('theme-toggle');
+      const sunIcon = themeToggle.querySelector('.sun-icon');
+      const moonIcon = themeToggle.querySelector('.moon-icon');
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
+      function updateIcons(theme) {
+        sunIcon.style.display = theme === 'light' ? 'none' : 'block';
+        moonIcon.style.display = theme === 'light' ? 'block' : 'none';
+      }
+      function getEffectiveTheme() {
+        const saved = localStorage.getItem('theme');
+        if (saved) return saved;
+        return mediaQuery.matches ? 'light' : 'dark';
+      }
+      function applyTheme(theme) {
+        if (theme === 'system') {
+          document.documentElement.removeAttribute('data-theme');
+          updateIcons(mediaQuery.matches ? 'light' : 'dark');
+        } else {
+          document.documentElement.setAttribute('data-theme', theme);
+          updateIcons(theme);
+        }
+      }
+      applyTheme(getEffectiveTheme());
+      mediaQuery.addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) applyTheme(e.matches ? 'light' : 'dark');
+      });
+      themeToggle.addEventListener('click', () => {
+        const currentTheme = getEffectiveTheme();
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('theme', newTheme);
+        applyTheme(newTheme);
+      });
+      const sidebarToggle = document.getElementById('sidebar-toggle');
+      const sidebar = document.getElementById('sidebar');
+      const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+      function openSidebar() {
+        sidebar.classList.add('open');
+        sidebarOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeSidebar() {
+        sidebar.classList.remove('open');
+        sidebarOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (sidebar.classList.contains('open')) closeSidebar();
+          else openSidebar();
+        });
+      }
+
+      if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeSidebar);
+      }
+
+      const sidebarClose = document.getElementById('sidebar-close');
+      if (sidebarClose) {
+        sidebarClose.addEventListener('click', closeSidebar);
+      }
+
+      if (sidebar) {
+        sidebar.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', closeSidebar);
+        });
+      }
+    })();
+    function copyCode(btn) {
+      const code = btn.parentElement.querySelector('pre code');
+      const text = code.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+        setTimeout(() => { btn.innerHTML = orig; }, 1500);
+      }).catch(() => {});
+    }
+  </script>
+</body>
+</html>
