@@ -47,8 +47,8 @@
         <ul class="nav-links">
           <li><a href="/features">Features</a></li>
           <li class="nav-docs"><a href="/docs/">Docs</a></li>
-          <li class="nav-docs-icon"><a href="/docs/" title="Docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></a></li>
           <li><a href="/downloads">Downloads</a></li>
+          <li class="nav-docs-icon"><a href="/docs/" title="Docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></a></li>
           <li><a href="https://github.com/TharukRenuja/zing" rel="noopener noreferrer" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></a></li>
         </ul>
         <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
@@ -103,19 +103,20 @@
           <span class="terminal-title">zing</span>
         </div>
         <div class="terminal-body tui-body" id="terminal-body">
-          <div class="tui-line tui-title"><span class="t-blue">zing</span> <span class="t-white">1 tasks</span> | <span class="t-green">1 running</span> | <span class="t-yellow">0 queued</span> | <span class="t-prompt">0 done</span> | <span class="t-blue">0 paused</span> | <span class="t-dim">downloaded</span> <span class="t-white">4.1 MB</span> | <span class="t-dim">speed</span> <span class="t-white">510.1 KB/s</span><span class="tui-logo">Z<span class="t-green">⚡</span>NG</span></div>
-          <div class="tui-line tui-file"><span class="t-dim">zing-v0.2.6-x86_64-mac.dmg</span> <span class="t-dim">(</span><span class="t-white">downloading</span><span class="t-dim">)</span></div>
-          <div class="tui-line"><span class="t-dim">Downloaded</span> <span class="t-white">4.1 MB</span> <span class="t-dim">/ Total</span> <span class="t-white">10.3 MB</span>     <span class="t-green">510.1 KB/s</span>     <span class="t-yellow">39%</span></div>
-          <div class="tui-line tui-progress-bar-row"><span class="tui-bar"></span><span class="t-green tui-pct"> 39%</span>     <span class="t-dim">4.1 MB / 10.3 MB</span>     <span class="t-white">510.1 KB/s</span></div>
+          <div id="tui-cmd" class="tui-line"><span class="t-prompt">$ </span><span id="tui-cmd-text"></span><span class="tui-cursor"></span></div>
+          <div class="tui-line tui-title"><span class="t-blue">zing</span> <span class="t-white">1 tasks</span> | <span class="t-green" data-tui="running">0 running</span> | <span class="t-yellow">0 queued</span> | <span class="t-prompt">0 done</span> | <span class="t-blue">0 paused</span> | <span class="t-dim">downloaded</span> <span class="t-white" data-tui="dl-title">0 B     </span> | <span class="t-dim">speed</span> <span class="t-white" data-tui="speed-title">--         </span><span class="tui-logo">Z<span class="t-green">⚡</span>NG</span></div>
+          <div class="tui-line tui-file"><span class="t-dim">zing-v0.2.6-x86_64-mac.dmg</span> <span class="t-dim">(</span><span class="t-white" data-tui="file-status">idle       </span><span class="t-dim">)</span></div>
+          <div class="tui-line"><span class="t-dim">Downloaded</span> <span class="t-white" data-tui="dl-main">0 B     </span> <span class="t-dim">/ Total</span> <span class="t-white">10.3 MB</span>     <span class="t-green" data-tui="speed-main">--         </span>     <span class="t-yellow" data-tui="pct-main">0%  </span></div>
+          <div class="tui-line tui-progress-bar-row"><span class="tui-bar" data-tui="bar"></span><span class="t-green tui-pct" data-tui="pct-bar"> 0%   </span>     <span class="t-dim"><span data-tui="dl-bar">0 B     </span> / 10.3 MB</span>     <span class="t-white" data-tui="speed-bar">--         </span></div>
           <div class="tui-line tui-section-header"><span class="t-dim">Stats</span></div>
-          <div class="tui-line tui-stats"><span class="t-dim">Downloaded</span> <span class="t-white">4.1 MB</span>            <span class="t-dim">Total</span> <span class="t-white">10.3 MB</span>            <span class="t-dim">Speed</span> <span class="t-green">510.1 KB/s</span>            <span class="t-dim">Peak</span> <span class="t-white">1.4 MB/s</span></div>
-          <div class="tui-line tui-stats"><span class="t-dim">ETA</span> <span class="t-yellow">12s</span>                      <span class="t-dim">Blocks</span> <span class="t-white">77/165</span>            <span class="t-dim">In-flight</span> <span class="t-white">15</span>                <span class="t-dim">Endgame</span> <span class="t-dim">OFF</span></div>
+          <div class="tui-line tui-stats"><span class="t-dim">Downloaded</span> <span class="t-white" data-tui="dl-stats">0 B     </span>            <span class="t-dim">Total</span> <span class="t-white">10.3 MB</span>            <span class="t-dim">Speed</span> <span class="t-green" data-tui="speed-stats">--         </span>            <span class="t-dim">Peak</span> <span class="t-white" data-tui="peak">--       </span></div>
+          <div class="tui-line tui-stats"><span class="t-dim">ETA</span> <span class="t-yellow" data-tui="eta">--  </span>                       <span class="t-dim">Blocks</span> <span class="t-white" data-tui="blocks">0/165    </span>           <span class="t-dim">In-flight</span> <span class="t-white" data-tui="inflight">0   </span>               <span class="t-dim">Endgame</span> <span class="t-white">OFF</span></div>
           <div class="tui-line tui-section-header"><span class="t-dim">Connections</span></div>
-          <div class="tui-line tui-table-header"><span class="t-blue">#     ADDR                         SPEED             BYTES            TIME          STATE</span></div>
-          <div class="tui-line tui-table-row"><span class="t-dim">0     </span><span class="t-white">185.199.110.112              </span><span class="t-green">62.7 KB/s         </span><span class="t-white">1.0 MB           </span><span class="t-dim">7s            </span><span class="t-green">• active</span></div>
-          <div class="tui-line tui-table-row"><span class="t-dim">1     </span><span class="t-white">185.199.110.134              </span><span class="t-green">-                 </span><span class="t-white">635.0 KB         </span><span class="t-dim">6s            </span><span class="t-yellow">• idle</span></div>
-          <div class="tui-line tui-table-row"><span class="t-dim">2     </span><span class="t-white">185.199.108.156              </span><span class="t-green">63.8 KB/s         </span><span class="t-white">319.1 KB         </span><span class="t-dim">6s            </span><span class="t-green">• active</span></div>
-          <div class="tui-line tui-keybar"><span class="tui-key">q</span><span class="t-dim"> quit    </span><span class="tui-key">j/k</span><span class="t-dim"> select    </span><span class="tui-key">p</span><span class="t-dim"> pause    </span><span class="tui-key">P</span><span class="t-dim"> pause all    </span><span class="tui-key">x</span><span class="t-dim"> stop    </span><span class="tui-key">r</span><span class="t-dim"> remove    </span><span class="tui-key">a</span><span class="t-dim"> add url      </span><span class="t-dim">Peak: </span><span class="t-white">1.4 MB/s</span></div>
+          <div class="tui-line tui-table-header"><span class="t-blue">#     ADDR                         SPEED             BYTES        TIME            STATE</span></div>
+          <div class="tui-line tui-table-row"><span class="t-dim">0     </span><span class="t-white">185.199.110.112              </span><span class="t-green" data-tui="conn0-speed">-                 </span><span class="t-white" data-tui="conn0-bytes">0 B               </span><span class="t-dim" data-tui="conn0-time">0s            </span><span class="t-yellow" data-tui="conn0-state">• idle  </span></div>
+          <div class="tui-line tui-table-row"><span class="t-dim">1     </span><span class="t-white">185.199.110.134              </span><span class="t-green" data-tui="conn1-speed">-                 </span><span class="t-white" data-tui="conn1-bytes">0 B               </span><span class="t-dim" data-tui="conn1-time">0s            </span><span class="t-yellow" data-tui="conn1-state">• idle  </span></div>
+          <div class="tui-line tui-table-row"><span class="t-dim">2     </span><span class="t-white">185.199.108.156              </span><span class="t-green" data-tui="conn2-speed">-                 </span><span class="t-white" data-tui="conn2-bytes">0 B               </span><span class="t-dim" data-tui="conn2-time">0s            </span><span class="t-yellow" data-tui="conn2-state">• idle  </span></div>
+          <div class="tui-line tui-keybar"><span class="tui-key">q</span><span class="t-dim"> quit    </span><span class="tui-key">j/k</span><span class="t-dim"> select    </span><span class="tui-key">p</span><span class="t-dim"> pause    </span><span class="tui-key">P</span><span class="t-dim"> pause all    </span><span class="tui-key">x</span><span class="t-dim"> stop    </span><span class="tui-key">r</span><span class="t-dim"> remove    </span><span class="tui-key">a</span><span class="t-dim"> add url      </span><span class="t-dim">Peak: </span><span class="t-white" data-tui="peak-bar">--       </span></div>
         </div>
       </div>
     </div>
@@ -441,32 +442,238 @@
       const terminalBody = document.getElementById("terminal-body");
       if (terminalBody) {
         const allLines = Array.from(terminalBody.children).filter(c => c.tagName === "DIV");
-        if (allLines.length > 0) {
-          const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const cmdLine = document.getElementById("tui-cmd");
+        const cmdText = document.getElementById("tui-cmd-text");
+        const bar = terminalBody.querySelector('[data-tui="bar"]');
 
-          if (prefersReducedMotion) {
-            allLines.forEach(l => l.classList.add("is-visible"));
-          } else {
-            let timers = [];
-            function clearTimers() { timers.forEach(t => clearTimeout(t)); timers = []; }
-            function hideAll() { allLines.forEach(l => l.classList.remove("is-visible")); }
+        const CMD = "zing tui zing.tharuk.pro/download/zing-v0.2.6-x86_64-mac.dmg";
+        const TOTAL_BYTES = 10800332;
+        const FINAL_DL = 4400000;
+        const CHAR_MS = 35;
+        const LINE_DELAY = 70;
+        const SIM_MS = 8000;
+        const HOLD_MS = 4000;
 
-            function animate() {
-              clearTimers(); hideAll();
-              const tuiLines = allLines;
-              let delay = 0;
-              tuiLines.forEach((l, i) => {
-                timers.push(setTimeout(() => l.classList.add("is-visible"), delay));
-                delay += 80;
-              });
-              // Loop
-              timers.push(setTimeout(() => {
-                hideAll();
-                timers.push(setTimeout(animate, 600));
-              }, delay + 5000));
-            }
-            animate();
+        const el = (sel) => terminalBody.querySelector(`[data-tui="${sel}"]`);
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        function fmtBytes(b) {
+          if (b === 0) return "0 B";
+          if (b < 1024) return b + " B";
+          if (b < 1048576) return (b / 1024).toFixed(1) + " KB";
+          return (b / 1048576).toFixed(1) + " MB";
+        }
+        function fmtSpeed(bps) {
+          if (!bps || bps < 100) return "--";
+          if (bps < 1048576) return (bps / 1024).toFixed(1) + " KB/s";
+          return (bps / 1048576).toFixed(1) + " MB/s";
+        }
+        function fmtPct(p) { return Math.round(p) + "%"; }
+        function pad(s, n) { return String(s).padEnd(n); }
+
+        function hideAll() { allLines.forEach(l => l.classList.remove("is-visible")); }
+        function showAll() { allLines.forEach(l => l.classList.add("is-visible")); }
+        function hideCmd() { cmdLine.classList.remove("is-visible"); }
+        function showCmd() { cmdLine.classList.add("is-visible"); }
+
+        function resetAll() {
+          hideAll(); hideCmd();
+          cmdText.textContent = "";
+          bar.style.setProperty("--bar-fill", "0%");
+          el("dl-title").textContent = pad("0 B", 7);
+          el("dl-main").textContent = pad("0 B", 7);
+          el("dl-stats").textContent = pad("0 B", 7);
+          el("dl-bar").textContent = pad("0 B", 7);
+          el("speed-title").textContent = pad("--", 10);
+          el("speed-main").textContent = pad("--", 10);
+          el("speed-stats").textContent = pad("--", 10);
+          el("speed-bar").textContent = pad("--", 10);
+          el("pct-main").textContent = pad("0%", 4);
+          el("pct-bar").textContent = pad(" 0%", 5);
+          el("eta").textContent = pad("--", 3);
+          el("blocks").textContent = pad("0/165", 7);
+          el("inflight").textContent = pad("0", 3);
+          el("peak").textContent = pad("--", 8);
+          el("peak-bar").textContent = pad("--", 8);
+          el("running").textContent = pad("0 running", 9);
+          el("file-status").textContent = pad("idle", 11);
+          el("file-status").className = "t-dim";
+          for (let i = 0; i < 3; i++) {
+            el(`conn${i}-speed`).textContent = pad("-", 17);
+            el(`conn${i}-speed`).className = "t-green";
+            el(`conn${i}-bytes`).textContent = pad("0 B", 15);
+            el(`conn${i}-time`).textContent = pad("0s", 13);
+            el(`conn${i}-state`).textContent = pad("• idle", 8);
+            el(`conn${i}-state`).className = "t-yellow";
           }
+        }
+
+        function setFinal() {
+          bar.style.setProperty("--bar-fill", "40.7%");
+          el("dl-title").textContent = pad("4.4 MB", 7);
+          el("dl-main").textContent = pad("4.4 MB", 7);
+          el("dl-stats").textContent = pad("4.4 MB", 7);
+          el("dl-bar").textContent = pad("4.4 MB", 7);
+          el("speed-title").textContent = pad("510.1 KB/s", 10);
+          el("speed-main").textContent = pad("510.1 KB/s", 10);
+          el("speed-stats").textContent = pad("510.1 KB/s", 10);
+          el("speed-bar").textContent = pad("510.1 KB/s", 10);
+          el("pct-main").textContent = pad("41%", 4);
+          el("pct-bar").textContent = pad(" 41%", 5);
+          el("eta").textContent = pad("12s", 3);
+          el("blocks").textContent = pad("77/165", 7);
+          el("inflight").textContent = pad("15", 3);
+          el("peak").textContent = pad("1.4 MB/s", 8);
+          el("peak-bar").textContent = pad("1.4 MB/s", 8);
+          el("running").textContent = pad("1 running", 9);
+          el("file-status").textContent = pad("downloading", 11);
+          el("file-status").className = "t-green";
+          el("conn0-speed").textContent = pad("62.7 KB/s", 17);
+          el("conn0-speed").className = "t-green";
+          el("conn0-bytes").textContent = pad("1.0 MB", 15);
+          el("conn0-time").textContent = pad("7s", 13);
+          el("conn0-state").textContent = pad("• active", 8);
+          el("conn0-state").className = "t-green";
+          el("conn1-speed").textContent = pad("-", 17);
+          el("conn1-speed").className = "t-green";
+          el("conn1-bytes").textContent = pad("0 B", 15);
+          el("conn1-time").textContent = pad("6s", 13);
+          el("conn1-state").textContent = pad("• idle", 8);
+          el("conn1-state").className = "t-yellow";
+          el("conn2-speed").textContent = pad("63.8 KB/s", 17);
+          el("conn2-speed").className = "t-green";
+          el("conn2-bytes").textContent = pad("319.1 KB", 15);
+          el("conn2-time").textContent = pad("6s", 13);
+          el("conn2-state").textContent = pad("• active", 8);
+          el("conn2-state").className = "t-green";
+        }
+
+        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+        async function typeCommand() {
+          hideAll();
+          showCmd();
+          cmdLine.classList.add("is-visible");
+          cmdText.textContent = "";
+          for (let i = 0; i < CMD.length; i++) {
+            cmdText.textContent += CMD[i];
+            await sleep(CHAR_MS);
+          }
+        }
+
+        async function revealTui() {
+          hideCmd();
+          for (const line of allLines) {
+            line.classList.add("is-visible");
+            await sleep(LINE_DELAY);
+          }
+        }
+
+        async function simulateDownload() {
+          const conns = [
+            { activateAt: 500, finalSpeed: 62700, finalBytes: 1048576 },
+            { activateAt: Infinity, finalSpeed: 0, finalBytes: 650240 },
+            { activateAt: 2000, finalSpeed: 63800, finalBytes: 326789 }
+          ];
+          conns.forEach(c => {
+            c.active = false;
+            c.speed = 0;
+            c.bytes = 0;
+          });
+
+          let peakSeen = 0;
+
+          await new Promise(resolve => {
+            let startTime = null;
+
+            function frame(t) {
+              if (!startTime) startTime = t;
+              const elapsed = t - startTime;
+              const progress = Math.min(elapsed / SIM_MS, 1);
+
+              const base = 1 - Math.pow(1 - progress, 3);
+              const bump = progress < 0.8 ? 0.08 * Math.sin(progress / 0.8 * Math.PI) : 0;
+              const eased = base + bump;
+              const dl = FINAL_DL * eased;
+              const pct = (dl / TOTAL_BYTES) * 100;
+
+              const baseSpeed = 510100 * Math.min(progress * 2, 1);
+              const jitter = 1 + (Math.random() - 0.5) * 0.1;
+              const speed = baseSpeed * jitter;
+              if (speed > peakSeen) peakSeen = speed;
+              const peak = peakSeen;
+
+              const remaining = TOTAL_BYTES - dl;
+              const eta = speed > 100 ? Math.ceil(remaining / speed) : "--";
+              const blocks = Math.round(77 * eased);
+              const inflight = Math.round(15 * Math.min(progress * 3, 1));
+
+              el("dl-title").textContent = pad(fmtBytes(dl), 7);
+              el("dl-main").textContent = pad(fmtBytes(dl), 7);
+              el("dl-stats").textContent = pad(fmtBytes(dl), 7);
+              el("dl-bar").textContent = pad(fmtBytes(dl), 7);
+              el("speed-title").textContent = pad(fmtSpeed(speed), 10);
+              el("speed-main").textContent = pad(fmtSpeed(speed), 10);
+              el("speed-stats").textContent = pad(fmtSpeed(speed), 10);
+              el("speed-bar").textContent = pad(fmtSpeed(speed), 10);
+              el("pct-main").textContent = pad(fmtPct(pct), 4);
+              el("pct-bar").textContent = pad(" " + fmtPct(pct), 5);
+              el("bar").style.setProperty("--bar-fill", pct.toFixed(1) + "%");
+              el("eta").textContent = pad(typeof eta === "number" ? eta + "s" : eta, 3);
+              el("blocks").textContent = pad(blocks + "/165", 7);
+              el("inflight").textContent = pad(String(inflight), 3);
+              el("peak").textContent = pad(fmtSpeed(peak), 8);
+              el("peak-bar").textContent = pad(fmtSpeed(peak), 8);
+
+              if (elapsed > 500) {
+                el("file-status").textContent = pad("downloading", 11);
+                el("file-status").className = "t-green";
+                el("running").textContent = pad("1 running", 9);
+              }
+
+              conns.forEach((c, i) => {
+                if (elapsed >= c.activateAt && !c.active) {
+                  c.active = true;
+                  el(`conn${i}-state`).textContent = pad("• active", 8);
+                  el(`conn${i}-state`).className = "t-green";
+                }
+                if (c.active) {
+                  const connElapsed = (elapsed - c.activateAt) / 1000;
+                  const connProgress = Math.min(connElapsed / 5, 1);
+                  c.speed = c.finalSpeed * connProgress * (1 + (Math.random() - 0.5) * 0.15);
+                  c.bytes = c.finalBytes * connProgress;
+                  el(`conn${i}-speed`).textContent = pad(fmtSpeed(c.speed), 17);
+                  el(`conn${i}-bytes`).textContent = pad(fmtBytes(c.bytes), 15);
+                  el(`conn${i}-time`).textContent = pad(Math.round(connElapsed) + "s", 13);
+                }
+              });
+
+              if (progress < 1) {
+                requestAnimationFrame(frame);
+              } else {
+                setFinal();
+                resolve();
+              }
+            }
+            requestAnimationFrame(frame);
+          });
+        }
+
+        if (prefersReducedMotion) {
+          showAll(); setFinal();
+        } else {
+          (async function loop() {
+            while (true) {
+              resetAll();
+              await sleep(400);
+              await typeCommand();
+              await sleep(600);
+              await revealTui();
+              await sleep(300);
+              await simulateDownload();
+              await sleep(HOLD_MS);
+            }
+          })();
         }
       }
 

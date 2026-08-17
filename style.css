@@ -347,10 +347,11 @@ h1 {
   display: inline-block;
   width: 60ch;
   height: 1em;
-  background: linear-gradient(90deg, var(--green) 0%, var(--green) 39%, #2a2a3e 39%, #2a2a3e 100%);
+  background: linear-gradient(90deg, var(--green) 0%, var(--green) var(--bar-fill, 0%), #2a2a3e var(--bar-fill, 0%), #2a2a3e 100%);
   border-radius: 2px;
   vertical-align: middle;
   margin-right: 0.2rem;
+  transition: width 0.1s linear;
 }
 .tui-pct {
   font-weight: 600;
@@ -381,6 +382,21 @@ h1 {
 .tui-key {
   color: var(--green);
   font-weight: 700;
+}
+
+/* ── TUI ANIMATION ── */
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.tui-cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  background: var(--text);
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+  margin-left: 1px;
+}
+[data-tui] {
+  transition: color 0.25s;
 }
 
 /* ── SECTIONS ── */
