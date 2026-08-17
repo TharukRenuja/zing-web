@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="icon" href="/assets/favicon.ico">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <script>
@@ -68,7 +69,7 @@
         <div class="dl-cards">
           <div class="dl-card">
             <div class="dl-card-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+              <i class="fa-brands fa-linux"></i>
             </div>
             <h3 class="dl-card-title">Linux</h3>
             <p class="dl-card-desc">Static binary for any Linux distribution. Zero dependencies.</p>
@@ -79,7 +80,7 @@
           </div>
           <div class="dl-card">
             <div class="dl-card-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              <i class="fa-brands fa-apple"></i>
             </div>
             <h3 class="dl-card-title">macOS</h3>
             <p class="dl-card-desc">Universal binary for Apple Silicon and Intel Macs.</p>
@@ -90,7 +91,7 @@
           </div>
           <div class="dl-card">
             <div class="dl-card-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"/><path d="M7 2v20"/><path d="M17 2v20"/><path d="M2 12h20"/></svg>
+              <i class="fa-brands fa-windows"></i>
             </div>
             <h3 class="dl-card-title">Windows</h3>
             <p class="dl-card-desc">Pre-built executable for Windows 10+ with daemon service support.</p>
@@ -111,20 +112,34 @@
         <div class="section-label">Browser Extension</div>
         <h2>One-click capture</h2>
         <p class="section-desc">Install the zing Interceptor extension and every download automatically goes through zing. Filter by file type or domain.</p>
-        <div style="display:flex;gap:2rem;align-items:center;flex-wrap:wrap">
-          <div style="flex:1;min-width:300px">
-            <img src="/assets/img/extension-main.png" alt="zing Browser Extension" class="screenshot" style="max-width:280px">
-          </div>
-          <div style="flex:1;min-width:300px">
+        <div class="ext-downloads">
+          <div class="ext-downloads-info">
+            <h3 style="margin:0 0 0.5rem;font-size:1rem">Features</h3>
             <ul style="list-style:none;padding:0">
               <li style="color:var(--muted);font-size:0.9rem;padding:0.35rem 0;padding-left:1.25rem;position:relative"><span style="position:absolute;left:0;top:0.65rem;width:6px;height:6px;border-radius:50%;background:var(--accent)"></span>Chrome and Firefox via Native Messaging</li>
               <li style="color:var(--muted);font-size:0.9rem;padding:0.35rem 0;padding-left:1.25rem;position:relative"><span style="position:absolute;left:0;top:0.65rem;width:6px;height:6px;border-radius:50%;background:var(--accent)"></span>File type and domain-based interception filters</li>
               <li style="color:var(--muted);font-size:0.9rem;padding:0.35rem 0;padding-left:1.25rem;position:relative"><span style="position:absolute;left:0;top:0.65rem;width:6px;height:6px;border-radius:50%;background:var(--accent)"></span>Configurable connections, concurrent tasks, and speed limits</li>
               <li style="color:var(--muted);font-size:0.9rem;padding:0.35rem 0;padding-left:1.25rem;position:relative"><span style="position:absolute;left:0;top:0.65rem;width:6px;height:6px;border-radius:50%;background:var(--accent)"></span>Stats dashboard with intercepted, ignored, and detected counts</li>
             </ul>
-            <div style="margin-top:1rem;display:flex;gap:0.75rem">
-              <a href="https://github.com/TharukRenuja/zing/releases" class="btn btn-primary" rel="noopener noreferrer" style="font-size:0.85rem">Chrome Extension</a>
-              <a href="https://github.com/TharukRenuja/zing/releases" class="btn btn-primary" rel="noopener noreferrer" style="font-size:0.85rem">Firefox Extension</a>
+          </div>
+          <div class="ext-downloads-cards">
+            <div class="dl-card">
+              <div class="dl-card-icon"><i class="fa-brands fa-chrome"></i></div>
+              <h3 class="dl-card-title">Chrome</h3>
+              <p class="dl-card-desc">Install from Chrome WebStore.</p>
+              <a href="https://github.com/TharukRenuja/zing/releases" class="btn btn-primary" rel="noopener noreferrer">
+                <i class="fa-solid fa-puzzle-piece"></i>
+                Install
+              </a>
+            </div>
+            <div class="dl-card">
+              <div class="dl-card-icon"><i class="fa-brands fa-firefox-browser"></i></div>
+              <h3 class="dl-card-title">Firefox</h3>
+              <p class="dl-card-desc">Install from Firefox Add-ons.</p>
+              <a href="https://github.com/TharukRenuja/zing/releases" class="btn btn-primary" rel="noopener noreferrer">
+                <i class="fa-solid fa-puzzle-piece"></i>
+                Install
+              </a>
             </div>
           </div>
         </div>

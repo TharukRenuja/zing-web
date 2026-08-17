@@ -1619,3 +1619,26 @@ footer a:hover { color: var(--text); }
   transition: background 0.2s;
 }
 .ext-carousel-dot.active { background: var(--accent); }
+
+/* ════════════════════════════════════════════════════════════════════
+   EXTENSION DOWNLOADS (downloads page)
+   ════════════════════════════════════════════════════════════════════ */
+.ext-downloads {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 3rem;
+  align-items: flex-start;
+  margin-top: 1.5rem;
+}
+.ext-downloads-info { min-width: 0; }
+.ext-downloads-cards {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin-top: -7rem;
+}
+
+@media (max-width: 768px) {
+  .ext-downloads { grid-template-columns: 1fr; gap: 1.5rem; }
+  .ext-downloads-cards { width: 100%; flex-direction: column;}
+}
