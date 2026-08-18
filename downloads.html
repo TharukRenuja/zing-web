@@ -2,27 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Download zing — fast, segmented download manager for Linux, macOS, and Windows.">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Download zing - a modern HTTP download manager for Linux, macOS, and Windows.">
   <title>Downloads - zing</title>
   <meta property="og:title" content="Downloads - zing">
-  <meta property="og:description" content="Download zing — fast, segmented download manager for Linux, macOS, and Windows.">
-  <meta property="og:url" content="https://zing.tharuk.pro/downloads.html">
+  <meta property="og:description" content="Download zing for Linux, macOS, and Windows.">
+  <meta property="og:url" content="https://zing.tharuk.pro/downloads">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Downloads - zing">
-  <meta name="twitter:description" content="Download zing — fast, segmented download manager for Linux, macOS, and Windows.">
-  <link rel="canonical" href="https://zing.tharuk.pro/downloads.html">
+  <meta name="twitter:description" content="Download zing for Linux, macOS, and Windows.">
+  <link rel="canonical" href="https://zing.tharuk.pro/downloads">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="dns-prefetch" href="https://github.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="icon" href="/assets/favicon.ico">
   <link rel="apple-touch-icon" href="/assets/favicon.ico">
-  <script>(function(){const t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
+  <script src="/assets/js/theme-init.js"></script>
 </head>
 <body>
+
 <!--NAV_START-->
   <nav aria-label="Main navigation">
     <div class="nav-inner">
@@ -41,22 +43,14 @@
       <div class="nav-right">
         <ul class="nav-links">
           <li><a href="/features">Features</a></li>
-          <li><a href="/downloads">Downloads</a></li>
-          <li class="nav-docs"><a href="/docs/" >Docs</a></li>
-          <li class="nav-docs-icon"><a href="/docs/"  title="Docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></a></li>
-          <li><a href="https://github.com/TharukRenuja/zing" rel="noopener noreferrer" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></a></li>
+          <li><a href="/downloads" class="active">Downloads</a></li>
+          <li class="nav-docs"><a href="/docs/">Docs</a></li>
+          <li class="nav-docs-icon"><a href="/docs/" title="Docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></a></li>
+          <li><a href="https://github.com/TharukRenuja/zing" rel="noopener noreferrer" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a></li>
         </ul>
         <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
           <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
           </svg>
           <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
@@ -65,133 +59,189 @@
       </div>
     </div>
   </nav>
-
 <!--NAV_END-->
-<main>
-  <section class="download-hero">
-    <div class="container">
-      <div class="section-label">Downloads</div>
-      <h1>v0.2.6</h1>
-      <p class="hero-desc">Released 2026-08-05</p>
-      <div class="dl-cards">
-        <div class="dl-card">
-          <div class="dl-card-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+
+  <main>
+    <section class="download-hero">
+      <div class="container">
+        <div class="section-label">Downloads</div>
+        <h1>Get zing</h1>
+        <p class="section-desc">Free, open source, and available on Linux, macOS, and Windows.</p>
+        <div class="dl-cards">
+          <div class="dl-card">
+            <div class="dl-card-icon">
+              <i class="fa-brands fa-linux"></i>
+            </div>
+            <h3 class="dl-card-title">Linux</h3>
+            <p class="dl-card-desc">Static binary for any Linux distribution. Zero dependencies.</p>
+            <div class="dl-dropdown">
+              <a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.6/zing-v0.2.6-x86_64-linux.tar.gz" class="btn btn-primary dl-dropdown-trigger" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download v0.2.6
+                <svg class="dl-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </a>
+              <div class="dl-dropdown-menu">
+                <a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.6/zing-v0.2.6-x86_64-linux.tar.gz" class="dl-dropdown-item" rel="noopener noreferrer">
+                  <i class="fa-solid fa-microchip"></i> x86_64
+                </a>
+                <a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.6/zing-v0.2.6-aarch64-linux.tar.gz" class="dl-dropdown-item" rel="noopener noreferrer">
+                  <i class="fa-solid fa-microchip"></i> aarch64
+                </a>
+              </div>
+            </div>
           </div>
-          <h3 class="dl-card-title">Linux</h3>
-          <p class="dl-card-desc">Static binary for x86_64. Zero dependencies.</p>
-          <a href="https://github.com/TharukRenuja/zing/releases/latest" class="btn btn-primary dl-card-btn" rel="noopener noreferrer">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            Download
-          </a>
-        </div>
-        <div class="dl-card">
-          <div class="dl-card-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 18v5M8 22h8M17.5 18a5 5 0 10-11 0"/><path d="M12 2a5 5 0 00-5 5c0 3 2 5 5 7 3-2 5-4 5-7a5 5 0 00-5-5z"/></svg>
+          <div class="dl-card">
+            <div class="dl-card-icon">
+              <i class="fa-brands fa-apple"></i>
+            </div>
+            <h3 class="dl-card-title">macOS</h3>
+            <p class="dl-card-desc">Universal binary for Apple Silicon and Intel Macs.</p>
+            <div class="dl-dropdown">
+              <a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.6/zing-v0.2.6-x86_64-mac.dmg" class="btn btn-primary dl-dropdown-trigger" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download v0.2.6
+                <svg class="dl-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </a>
+              <div class="dl-dropdown-menu">
+                <a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.6/zing-v0.2.6-x86_64-mac.dmg" class="dl-dropdown-item" rel="noopener noreferrer">
+                  <i class="fa-brands fa-apple"></i> Intel (x86_64)
+                </a>
+                <a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.6/zing-v0.2.6-aarch64-mac.dmg" class="dl-dropdown-item" rel="noopener noreferrer">
+                  <i class="fa-brands fa-apple"></i> Apple Silicon (aarch64)
+                </a>
+              </div>
+            </div>
           </div>
-          <h3 class="dl-card-title">macOS</h3>
-          <p class="dl-card-desc">Universal binary for Apple Silicon and Intel.</p>
-          <a href="https://github.com/TharukRenuja/zing/releases/latest" class="btn btn-primary dl-card-btn" rel="noopener noreferrer">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            Download
-          </a>
-        </div>
-        <div class="dl-card">
-          <div class="dl-card-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <div class="dl-card">
+            <div class="dl-card-icon">
+              <i class="fa-brands fa-windows"></i>
+            </div>
+            <h3 class="dl-card-title">Windows</h3>
+            <p class="dl-card-desc">Pre-built executable for Windows 10+ with daemon service support.</p>
+            <a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.6/zing-v0.2.6-windows.msi" class="btn btn-primary" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download v0.2.6
+            </a>
           </div>
-          <h3 class="dl-card-title">Windows</h3>
-          <p class="dl-card-desc">Pre-built executable for Windows x86_64.</p>
-          <a href="https://github.com/TharukRenuja/zing/releases/latest" class="btn btn-primary dl-card-btn" rel="noopener noreferrer">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            Download
-          </a>
         </div>
       </div>
-      <div style="text-align:center;margin-top:1.5rem">
-        <a href="https://github.com/TharukRenuja/zing/releases" class="btn btn-ghost" rel="noopener noreferrer">All Releases &rarr;</a>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-label">Browser Extension</div>
+        <h2>One-click capture</h2>
+        <p class="section-desc">Install the zing Interceptor extension and every download automatically goes through zing. Filter by file type or domain.</p>
+        <div class="ext-downloads">
+          <div class="ext-downloads-info">
+            <h3 style="margin:0 0 0.5rem;font-size:1rem">Features</h3>
+            <ul style="list-style:none;padding:0">
+              <li style="color:var(--muted);font-size:0.9rem;padding:0.35rem 0;padding-left:1.25rem;position:relative"><span style="position:absolute;left:0;top:0.65rem;width:6px;height:6px;border-radius:50%;background:var(--accent)"></span>Chrome and Firefox via Native Messaging</li>
+              <li style="color:var(--muted);font-size:0.9rem;padding:0.35rem 0;padding-left:1.25rem;position:relative"><span style="position:absolute;left:0;top:0.65rem;width:6px;height:6px;border-radius:50%;background:var(--accent)"></span>File type and domain-based interception filters</li>
+              <li style="color:var(--muted);font-size:0.9rem;padding:0.35rem 0;padding-left:1.25rem;position:relative"><span style="position:absolute;left:0;top:0.65rem;width:6px;height:6px;border-radius:50%;background:var(--accent)"></span>Configurable connections, concurrent tasks, and speed limits</li>
+              <li style="color:var(--muted);font-size:0.9rem;padding:0.35rem 0;padding-left:1.25rem;position:relative"><span style="position:absolute;left:0;top:0.65rem;width:6px;height:6px;border-radius:50%;background:var(--accent)"></span>Stats dashboard with intercepted, ignored, and detected counts</li>
+            </ul>
+          </div>
+          <div class="ext-downloads-cards">
+            <div class="dl-card">
+              <div class="dl-card-icon"><i class="fa-brands fa-chrome"></i></div>
+              <h3 class="dl-card-title">Chrome</h3>
+              <p class="dl-card-desc">Install from Chrome WebStore.</p>
+              <a href="https://github.com/TharukRenuja/zing/releases" class="btn btn-primary" rel="noopener noreferrer">
+                <i class="fa-solid fa-puzzle-piece"></i>
+                Install
+              </a>
+            </div>
+            <div class="dl-card">
+              <div class="dl-card-icon"><i class="fa-brands fa-firefox-browser"></i></div>
+              <h3 class="dl-card-title">Firefox</h3>
+              <p class="dl-card-desc">Install from Firefox Add-ons.</p>
+              <a href="https://github.com/TharukRenuja/zing/releases" class="btn btn-primary" rel="noopener noreferrer">
+                <i class="fa-solid fa-puzzle-piece"></i>
+                Install
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
-  <div class="divider"></div>
-  <section class="section">
-    <div class="container">
-      <div class="section-label">Build from Source</div>
-      <h2>Compile zing yourself</h2>
-      <p class="section-desc">Requires Rust 1.75+ and Cargo. Clone the repo and build in release mode.</p>
-      <div class="code-block">
-        <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button>
-        <pre><code>git clone https://github.com/TharukRenuja/zing.git
-cd zing
-cargo build --release</code></pre>
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-label">Install from source</div>
+        <h2>Build it yourself</h2>
+        <p class="section-desc">zing is written in Rust. Clone the repo and build with cargo.</p>
+        <div class="build-terminal">
+          <div><span class="terminal-prompt">$ </span><span style="color:var(--text)">git clone https://github.com/TharukRenuja/zing.git</span></div>
+          <div><span class="terminal-prompt">$ </span><span style="color:var(--text)">cd zing</span></div>
+          <div><span class="terminal-prompt">$ </span><span style="color:var(--text)">cargo build --release</span></div>
+          <div><span class="terminal-prompt">$ </span><span style="color:var(--text)">cp target/release/zing /usr/local/bin/</span></div>
+        </div>
       </div>
-    </div>
-  </section>
-  <div class="divider"></div>
-  <section class="section">
-    <div class="container">
-      <div class="section-label">Changelog</div>
-      <h2>v0.2.6</h2>
-      <div class="changelog-wrap">
-        <div class="changelog" id="changelog-body">
-          <h2 id="v026-browser-extension-support">v0.2.6 (Browser Extension Support)</h2>
-<h3 id="browser-extension">Browser Extension </h3>
-<ul>
-<li>Install native host manifests for <strong>all</strong> Chromium-based browsers automatically 
-</li>
-<li>Scans <code>~/.config/</code>, <code>~/.var/app/</code> (Flatpak), <code>~/snap/</code> (Snap) — no more hardcoded browser names 
-</li>
-<li>Fixed gecko extension ID to <code>oss.zing.intercept@tharukrj</code> 
-</li>
-<li>Chrome/Edge/Firefox/Brave/Helium/Vivaldi/Chromium — all covered with one command 
-</li>
-</ul>
-<h3 id="setup">Setup </h3>
-<div class="code-block"><button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button><pre><code>zing extension install
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-label">Changelog</div>
+        <h2>v0.2.6</h2>
+        <div class="changelog-wrap">
+          <div class="changelog" id="changelog-body">
+            <h2 id="v026-browser-extension-support">v0.2.6 (Browser Extension Support)</h2>
+            <h3 id="browser-extension">Browser Extension</h3>
+            <ul>
+              <li>Install native host manifests for <strong>all</strong> Chromium-based browsers automatically</li>
+              <li>Scans <code>~/.config/</code>, <code>~/.var/app/</code> (Flatpak), <code>~/snap/</code> (Snap) &mdash; no more hardcoded browser names</li>
+              <li>Fixed gecko extension ID to <code>oss.zing.intercept@tharukrj</code></li>
+              <li>Chrome/Edge/Firefox/Brave/Helium/Vivaldi/Chromium &mdash; all covered with one command</li>
+            </ul>
+            <h3 id="setup">Setup</h3>
+            <pre><code>zing extension install
 # auto-discovers all browsers
 
-zing extension uninstall  
-# removes all manifests 
-</code></pre></div>
-<p>Then install the extension: https://github.com/TharukRenuja/zing-interceptor</p>
-<h3 id="other">Other</h3>
-<ul>
-<li>Updated tray and packaging icons 
-</li>
-<li>Version bump to 0.2.6
-</li>
-</ul>
-<p><strong>Full Changelog</strong>: https://github.com/TharukRenuja/zing/compare/v0.2.5...v0.2.6</p>
+zing extension uninstall
+# removes all manifests</code></pre>
+            <p>Then install the extension: https://github.com/TharukRenuja/zing-interceptor</p>
+            <h3 id="other">Other</h3>
+            <ul>
+              <li>Updated tray and packaging icons</li>
+              <li>Version bump to 0.2.6</li>
+            </ul>
+            <p><strong>Full Changelog</strong>: https://github.com/TharukRenuja/zing/compare/v0.2.5...v0.2.6</p>
+          </div>
+          <button class="changelog-toggle" id="changelog-toggle" onclick="document.getElementById('changelog-body').classList.toggle('expanded');this.textContent=this.textContent==='Show changelog'?'Hide changelog':'Show changelog'">Show changelog</button>
         </div>
-        <button class="changelog-toggle" id="changelog-toggle" onclick="document.getElementById('changelog-body').classList.toggle('expanded');this.textContent=this.textContent==='Show changelog'?'Hide changelog':'Show changelog'">Show changelog</button>
       </div>
-    </div>
-  </section>
-  <div class="divider"></div>
-  <section class="section">
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-label">Older Versions</div>
+        <h2>Previous releases</h2>
+        <div class="table-wrap"><table class="releases-table"><thead><tr><th>Version</th><th>Date</th><th class="dl-header">Downloads</th><th>Info</th></tr></thead><tbody>
+<tr><td>v0.2.5 (Beta)</td><td>2026-08-04</td><td class="dl-cell"><div class="dl-links"><a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.5/zing-v0.2.5-aarch64-linux.tar.gz" class="dl-secondary" title="Linux ARM"><i class="fa-brands fa-linux"></i> arm</a><a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.5/zing-v0.2.5-x86_64-linux.tar.gz" class="dl-secondary" title="Linux x86"><i class="fa-brands fa-linux"></i> x86</a><a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.5/zing-v0.2.5-x86_64-mac.dmg" class="dl-secondary" title="macOS Intel"><i class="fa-brands fa-apple"></i> intel</a><a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.5/zing-v0.2.5-aarch64-mac.dmg" class="dl-secondary" title="macOS Silicon"><i class="fa-brands fa-apple"></i> silicon</a><a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.5/zing-v0.2.5-windows.msi" class="dl-secondary" title="Windows"><i class="fa-brands fa-windows"></i> universal</a></div></td><td><a href="https://github.com/TharukRenuja/zing/releases/tag/v0.2.5" class="dl-secondary dl-info" title="Release info" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></td></tr>
+<tr><td>v0.2.4 (Beta)</td><td>2026-08-04</td><td class="dl-cell"><div class="dl-links"><a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.4/zing-v0.2.4-aarch64-linux.tar.gz" class="dl-secondary" title="Linux ARM"><i class="fa-brands fa-linux"></i> arm</a><a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.4/zing-v0.2.4-x86_64-linux.tar.gz" class="dl-secondary" title="Linux x86"><i class="fa-brands fa-linux"></i> x86</a><a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.4/zing-v0.2.4-x86_64-mac.dmg" class="dl-secondary" title="macOS Intel"><i class="fa-brands fa-apple"></i> intel</a><a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.4/zing-v0.2.4-aarch64-mac.dmg" class="dl-secondary" title="macOS Silicon"><i class="fa-brands fa-apple"></i> silicon</a><a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.4/zing-v0.2.4-windows.msi" class="dl-secondary" title="Windows"><i class="fa-brands fa-windows"></i> universal</a></div></td><td><a href="https://github.com/TharukRenuja/zing/releases/tag/v0.2.4" class="dl-secondary dl-info" title="Release info" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></td></tr>
+<tr><td>v0.2.3 (Beta)</td><td>2026-08-04</td><td class="dl-cell"><div class="dl-links"><a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.3/zing-v0.2.3-aarch64-linux.tar.gz" class="dl-secondary" title="Linux ARM"><i class="fa-brands fa-linux"></i> arm</a><a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.3/zing-v0.2.3-x86_64-linux.tar.gz" class="dl-secondary" title="Linux x86"><i class="fa-brands fa-linux"></i> x86</a><a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.3/zing-v0.2.3-x86_64-mac.dmg" class="dl-secondary" title="macOS Intel"><i class="fa-brands fa-apple"></i> intel</a><a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.3/zing-v0.2.3-aarch64-mac.dmg" class="dl-secondary" title="macOS Silicon"><i class="fa-brands fa-apple"></i> silicon</a><a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.3/zing-v0.2.3-windows.msi" class="dl-secondary" title="Windows"><i class="fa-brands fa-windows"></i> universal</a></div></td><td><a href="https://github.com/TharukRenuja/zing/releases/tag/v0.2.3" class="dl-secondary dl-info" title="Release info" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></td></tr>
+<tr><td>v0.2.2 (Beta)</td><td>2026-08-03</td><td class="dl-cell"><div class="dl-links"><a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.2/zing-v0.2.2-aarch64-linux.tar.gz" class="dl-secondary" title="Linux ARM"><i class="fa-brands fa-linux"></i> arm</a><a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.2/zing-v0.2.2-x86_64-linux.tar.gz" class="dl-secondary" title="Linux x86"><i class="fa-brands fa-linux"></i> x86</a><a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.2/zing-v0.2.2-x86_64-mac.dmg" class="dl-secondary" title="macOS Intel"><i class="fa-brands fa-apple"></i> intel</a><a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.2/zing-v0.2.2-aarch64-mac.dmg" class="dl-secondary" title="macOS Silicon"><i class="fa-brands fa-apple"></i> silicon</a><a href="https://github.com/TharukRenuja/zing/releases/download/v0.2.2/zing-v0.2.2-windows.msi" class="dl-secondary" title="Windows"><i class="fa-brands fa-windows"></i> universal</a></div></td><td><a href="https://github.com/TharukRenuja/zing/releases/tag/v0.2.2" class="dl-secondary dl-info" title="Release info" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></td></tr>
+</tbody></table></div>
+      </div>
+    </section>
+  </main>
+
+<!--FOOTER_START-->
+  <footer>
     <div class="container">
-      <div class="section-label">Older Versions</div>
-      <h2>Previous releases</h2>
-      <div class="table-wrap"><table><thead><tr><th>Version</th><th>Date</th><th></th></tr></thead><tbody><tr><td>v0.2.5 (Beta)</td><td>2026-08-04</td><td><a href="https://github.com/TharukRenuja/zing/releases/tag/v0.2.5" class="dl-secondary">Download</a></td></tr>
-<tr><td>v0.2.4 (Beta)</td><td>2026-08-04</td><td><a href="https://github.com/TharukRenuja/zing/releases/tag/v0.2.4" class="dl-secondary">Download</a></td></tr>
-<tr><td>v0.2.3 (Beta)</td><td>2026-08-04</td><td><a href="https://github.com/TharukRenuja/zing/releases/tag/v0.2.3" class="dl-secondary">Download</a></td></tr>
-<tr><td>v0.2.2 (Beta)</td><td>2026-08-03</td><td><a href="https://github.com/TharukRenuja/zing/releases/tag/v0.2.2" class="dl-secondary">Download</a></td></tr></tbody></table></div>
+      <p>&copy; 2026 zing &middot; <a href="https://github.com/TharukRenuja/zing/blob/main/LICENSE" rel="noopener noreferrer">AGPL-3.0</a> &middot; <a href="https://www.rust-lang.org" rel="noopener noreferrer">Built with Rust</a></p>
     </div>
-  </section>
-</main>
-<footer>
-&copy; 2026 zing &middot; <a href="https://github.com/TharukRenuja/zing/blob/main/LICENSE" rel="noopener noreferrer">AGPL-3.0</a> &middot; <a href="https://www.rust-lang.org" rel="noopener noreferrer">Built with Rust</a>
-</footer>
-<script>
-(()=>{
-  const t=document.getElementById('theme-toggle');if(!t)return;
-  const s=t.querySelector('.sun-icon'),m=t.querySelector('.moon-icon'),q=window.matchMedia('(prefers-color-scheme: light)');
-  function u(t){t==='light'?(s.style.display='none',m.style.display='block'):(s.style.display='block',m.style.display='none')}
-  function g(){const s=localStorage.getItem('theme');return s||(q.matches?'light':'dark')}
-  function a(t){t==='system'?(document.documentElement.removeAttribute('data-theme'),u(q.matches?'light':'dark')):(document.documentElement.setAttribute('data-theme',t),u(t))}
-  a(g());q.addEventListener('change',e=>{if(!localStorage.getItem('theme'))a(e.matches?'light':'dark')});
-  t.addEventListener('click',()=>{const c=g(),n=c==='dark'?'light':'dark';localStorage.setItem('theme',n);a(n)});
-})();
-</script>
+  </footer>
+<!--FOOTER_END-->
+
+  <script src="/assets/js/docs.js"></script>
+  <script src="/assets/js/theme.js"></script>
 </body>
 </html>

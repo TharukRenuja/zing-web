@@ -721,12 +721,7 @@ def make_page(title, body, slug, nav_template, footer_template, pages, is_index=
       }}
     }}
   </style>
-  <script>
-    (function () {{
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
-    }})();
-  </script>
+  <script src="/assets/js/theme-init.js"></script>
 </head>
 <body>
   {nav_html}
@@ -754,89 +749,8 @@ def make_page(title, body, slug, nav_template, footer_template, pages, is_index=
     </div>
   </div>
 
-  <script>
-    (() => {{
-      const themeToggle = document.getElementById('theme-toggle');
-      const sunIcon = themeToggle.querySelector('.sun-icon');
-      const moonIcon = themeToggle.querySelector('.moon-icon');
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
-      function updateIcons(theme) {{
-        sunIcon.style.display = theme === 'light' ? 'none' : 'block';
-        moonIcon.style.display = theme === 'light' ? 'block' : 'none';
-      }}
-      function getEffectiveTheme() {{
-        const saved = localStorage.getItem('theme');
-        if (saved) return saved;
-        return mediaQuery.matches ? 'light' : 'dark';
-      }}
-      function applyTheme(theme) {{
-        if (theme === 'system') {{
-          document.documentElement.removeAttribute('data-theme');
-          updateIcons(mediaQuery.matches ? 'light' : 'dark');
-        }} else {{
-          document.documentElement.setAttribute('data-theme', theme);
-          updateIcons(theme);
-        }}
-      }}
-      applyTheme(getEffectiveTheme());
-      mediaQuery.addEventListener('change', (e) => {{
-        if (!localStorage.getItem('theme')) applyTheme(e.matches ? 'light' : 'dark');
-      }});
-      themeToggle.addEventListener('click', () => {{
-        const currentTheme = getEffectiveTheme();
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        localStorage.setItem('theme', newTheme);
-        applyTheme(newTheme);
-      }});
-      const sidebarToggle = document.getElementById('sidebar-toggle');
-      const sidebar = document.getElementById('sidebar');
-      const sidebarOverlay = document.getElementById('sidebar-overlay');
-
-      function openSidebar() {{
-        sidebar.classList.add('open');
-        sidebarOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      }}
-
-      function closeSidebar() {{
-        sidebar.classList.remove('open');
-        sidebarOverlay.classList.remove('active');
-        document.body.style.overflow = '';
-      }}
-
-      if (sidebarToggle) {{
-        sidebarToggle.addEventListener('click', (e) => {{
-          e.stopPropagation();
-          if (sidebar.classList.contains('open')) closeSidebar();
-          else openSidebar();
-        }});
-      }}
-
-      if (sidebarOverlay) {{
-        sidebarOverlay.addEventListener('click', closeSidebar);
-      }}
-
-      const sidebarClose = document.getElementById('sidebar-close');
-      if (sidebarClose) {{
-        sidebarClose.addEventListener('click', closeSidebar);
-      }}
-
-      if (sidebar) {{
-        sidebar.querySelectorAll('a').forEach(link => {{
-          link.addEventListener('click', closeSidebar);
-        }});
-      }}
-    }})();
-    function copyCode(btn) {{
-      const code = btn.parentElement.querySelector('pre code');
-      const text = code.textContent;
-      navigator.clipboard.writeText(text).then(() => {{
-        const orig = btn.innerHTML;
-        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
-        setTimeout(() => {{ btn.innerHTML = orig; }}, 1500);
-      }}).catch(() => {{}});
-    }}
-  </script>
+  <script src="/assets/js/theme.js"></script>
+  <script src="/assets/js/docs.js"></script>
 </body>
 </html>'''
 
@@ -863,18 +777,27 @@ def fetch_latest_release():
     date = latest.get('published_at', '2026-08-17')[:10]
     body = latest.get('body', '')
     changelog = md_to_html(body) if body else '<p>No changelog available.</p>'
+    changelog = re.sub(r'<div class="code-block"><button class="copy-btn"[^>]*>.*?</button>', '', changelog)
+    changelog = changelog.replace('</div><pre><code>', '<pre><code>')
 
     older_rows = []
     for r in releases[1:]:
         tag = r.get('tag_name', '')
         rd = r.get('published_at', '')[:10]
         rn = r.get('name', tag)
+        base = f'https://github.com/TharukRenuja/zing/releases/download/{tag}'
+        info = f'https://github.com/TharukRenuja/zing/releases/tag/{tag}'
         older_rows.append(
-            f'<tr><td>{rn}</td><td>{rd}</td>'
-            f'<td><a href="https://github.com/TharukRenuja/zing/releases/tag/{tag}" class="dl-secondary">Download</a></td></tr>'
+            f'<tr><td>{rn}</td><td>{rd}</td><td class="dl-cell"><div class="dl-links">'
+            f'<a href="{base}/zing-{tag}-aarch64-linux.tar.gz" class="dl-secondary" title="Linux ARM"><i class="fa-brands fa-linux"></i> arm</a>'
+            f'<a href="{base}/zing-{tag}-x86_64-linux.tar.gz" class="dl-secondary" title="Linux x86"><i class="fa-brands fa-linux"></i> x86</a>'
+            f'<a href="{base}/zing-{tag}-x86_64-mac.dmg" class="dl-secondary" title="macOS Intel"><i class="fa-brands fa-apple"></i> intel</a>'
+            f'<a href="{base}/zing-{tag}-aarch64-mac.dmg" class="dl-secondary" title="macOS Silicon"><i class="fa-brands fa-apple"></i> silicon</a>'
+            f'<a href="{base}/zing-{tag}-windows.msi" class="dl-secondary" title="Windows"><i class="fa-brands fa-windows"></i> universal</a>'
+            f'</div></td><td><a href="{info}" class="dl-secondary dl-info" title="Release info" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></td></tr>'
         )
     older_html = (
-        '<div class="table-wrap"><table><thead><tr><th>Version</th><th>Date</th><th></th></tr></thead><tbody>'
+        '<div class="table-wrap"><table><thead><tr><th>Version</th><th>Date</th><th class="dl-header">Downloads</th></tr></thead><tbody>'
         + '\n'.join(older_rows)
         + '</tbody></table></div>'
         if older_rows else ''
@@ -890,6 +813,7 @@ def fetch_latest_release():
 
 def build_downloads_page(root, nav_template, footer_template):
     dl_nav = nav_template.replace('{{FEATURES_HREF}}', '/#features').replace('{{DOCS_STYLE}}', '')
+    dl_nav = dl_nav.replace('<a href="/downloads">Downloads</a>', '<a href="/downloads" class="active">Downloads</a>')
     release_info = fetch_latest_release()
     if release_info:
         version = release_info['version']
@@ -905,25 +829,26 @@ def build_downloads_page(root, nav_template, footer_template):
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Download zing — fast, segmented download manager for Linux, macOS, and Windows.">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Download zing - a modern HTTP download manager for Linux, macOS, and Windows.">
   <title>Downloads - zing</title>
   <meta property="og:title" content="Downloads - zing">
-  <meta property="og:description" content="Download zing — fast, segmented download manager for Linux, macOS, and Windows.">
-  <meta property="og:url" content="https://zing.tharuk.pro/downloads.html">
+  <meta property="og:description" content="Download zing for Linux, macOS, and Windows.">
+  <meta property="og:url" content="https://zing.tharuk.pro/downloads">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Downloads - zing">
-  <meta name="twitter:description" content="Download zing — fast, segmented download manager for Linux, macOS, and Windows.">
-  <link rel="canonical" href="https://zing.tharuk.pro/downloads.html">
+  <meta name="twitter:description" content="Download zing for Linux, macOS, and Windows.">
+  <link rel="canonical" href="https://zing.tharuk.pro/downloads">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="dns-prefetch" href="https://github.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="icon" href="/assets/favicon.ico">
   <link rel="apple-touch-icon" href="/assets/favicon.ico">
-  <script>(function(){{const t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}})();</script>
+  <script src="/assets/js/theme-init.js"></script>
 </head>
 <body>
 <!--NAV_START-->
@@ -933,63 +858,126 @@ def build_downloads_page(root, nav_template, footer_template):
   <section class="download-hero">
     <div class="container">
       <div class="section-label">Downloads</div>
-      <h1>{version}</h1>
-      <p class="hero-desc">Released {date}</p>
+      <h1>Get zing</h1>
+      <p class="section-desc">Free, open source, and available on Linux, macOS, and Windows.</p>
+      <div class="dl-version">{version}</div>
       <div class="dl-cards">
         <div class="dl-card">
           <div class="dl-card-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            <i class="fa-brands fa-linux"></i>
           </div>
           <h3 class="dl-card-title">Linux</h3>
-          <p class="dl-card-desc">Static binary for x86_64. Zero dependencies.</p>
-          <a href="https://github.com/TharukRenuja/zing/releases/latest" class="btn btn-primary dl-card-btn" rel="noopener noreferrer">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            Download
-          </a>
-        </div>
-        <div class="dl-card">
-          <div class="dl-card-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 18v5M8 22h8M17.5 18a5 5 0 10-11 0"/><path d="M12 2a5 5 0 00-5 5c0 3 2 5 5 7 3-2 5-4 5-7a5 5 0 00-5-5z"/></svg>
+          <p class="dl-card-desc">Static binary for any Linux distribution. Zero dependencies.</p>
+          <div class="dl-dropdown">
+            <a href="https://github.com/TharukRenuja/zing/releases/latest" class="btn btn-primary dl-dropdown-trigger" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+               Download {version}
+               <svg class="dl-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+             </a>
+             <div class="dl-dropdown-menu">
+               <a href="https://github.com/TharukRenuja/zing/releases/latest" class="dl-dropdown-item" rel="noopener noreferrer">
+                 <i class="fa-solid fa-microchip"></i> x86_64
+               </a>
+               <a href="https://github.com/TharukRenuja/zing/releases/latest" class="dl-dropdown-item" rel="noopener noreferrer">
+                 <i class="fa-solid fa-microchip"></i> aarch64
+               </a>
+             </div>
+           </div>
+         </div>
+         <div class="dl-card">
+           <div class="dl-card-icon">
+             <i class="fa-brands fa-apple"></i>
+           </div>
+           <h3 class="dl-card-title">macOS</h3>
+           <p class="dl-card-desc">Universal binary for Apple Silicon and Intel Macs.</p>
+           <div class="dl-dropdown">
+             <a href="https://github.com/TharukRenuja/zing/releases/latest" class="btn btn-primary dl-dropdown-trigger" rel="noopener noreferrer">
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+               Download {version}
+               <svg class="dl-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </a>
+            <div class="dl-dropdown-menu">
+              <a href="https://github.com/TharukRenuja/zing/releases/latest" class="dl-dropdown-item" rel="noopener noreferrer">
+                <i class="fa-brands fa-apple"></i> Intel (x86_64)
+              </a>
+              <a href="https://github.com/TharukRenuja/zing/releases/latest" class="dl-dropdown-item" rel="noopener noreferrer">
+                <i class="fa-brands fa-apple"></i> Apple Silicon (aarch64)
+              </a>
+            </div>
           </div>
-          <h3 class="dl-card-title">macOS</h3>
-          <p class="dl-card-desc">Universal binary for Apple Silicon and Intel.</p>
-          <a href="https://github.com/TharukRenuja/zing/releases/latest" class="btn btn-primary dl-card-btn" rel="noopener noreferrer">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            Download
-          </a>
         </div>
         <div class="dl-card">
           <div class="dl-card-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <i class="fa-brands fa-windows"></i>
           </div>
           <h3 class="dl-card-title">Windows</h3>
-          <p class="dl-card-desc">Pre-built executable for Windows x86_64.</p>
-          <a href="https://github.com/TharukRenuja/zing/releases/latest" class="btn btn-primary dl-card-btn" rel="noopener noreferrer">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            Download
+          <p class="dl-card-desc">Pre-built executable for Windows 10+ with daemon service support.</p>
+          <a href="https://github.com/TharukRenuja/zing/releases/latest" class="btn btn-primary" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download {version}
           </a>
         </div>
       </div>
-      <div style="text-align:center;margin-top:1.5rem">
-        <a href="https://github.com/TharukRenuja/zing/releases" class="btn btn-ghost" rel="noopener noreferrer">All Releases &rarr;</a>
-      </div>
     </div>
   </section>
-  <div class="divider"></div>
+
   <section class="section">
     <div class="container">
-      <div class="section-label">Build from Source</div>
-      <h2>Compile zing yourself</h2>
-      <p class="section-desc">Requires Rust 1.75+ and Cargo. Clone the repo and build in release mode.</p>
-      <div class="code-block">
-        <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> Copy</button>
-        <pre><code>git clone https://github.com/TharukRenuja/zing.git
-cd zing
-cargo build --release</code></pre>
+      <div class="section-label">Browser Extension</div>
+      <h2>One-click capture</h2>
+      <p class="section-desc">Install the zing Interceptor extension and every download automatically goes through zing. Filter by file type or domain.</p>
+      <div class="ext-downloads">
+        <div class="ext-downloads-info">
+          <h3 style="margin:0 0 0.5rem;font-size:1rem">Features</h3>
+          <ul style="list-style:none;padding:0">
+            <li style="color:var(--muted);font-size:0.9rem;padding:0.35rem 0;padding-left:1.25rem;position:relative"><span style="position:absolute;left:0;top:0.65rem;width:6px;height:6px;border-radius:50%;background:var(--accent)"></span>Chrome and Firefox via Native Messaging</li>
+            <li style="color:var(--muted);font-size:0.9rem;padding:0.35rem 0;padding-left:1.25rem;position:relative"><span style="position:absolute;left:0;top:0.65rem;width:6px;height:6px;border-radius:50%;background:var(--accent)"></span>File type and domain-based interception filters</li>
+            <li style="color:var(--muted);font-size:0.9rem;padding:0.35rem 0;padding-left:1.25rem;position:relative"><span style="position:absolute;left:0;top:0.65rem;width:6px;height:6px;border-radius:50%;background:var(--accent)"></span>Configurable connections, concurrent tasks, and speed limits</li>
+            <li style="color:var(--muted);font-size:0.9rem;padding:0.35rem 0;padding-left:1.25rem;position:relative"><span style="position:absolute;left:0;top:0.65rem;width:6px;height:6px;border-radius:50%;background:var(--accent)"></span>Stats dashboard with intercepted, ignored, and detected counts</li>
+          </ul>
+        </div>
+        <div class="ext-downloads-cards">
+          <div class="dl-card">
+            <div class="dl-card-icon"><i class="fa-brands fa-chrome"></i></div>
+            <h3 class="dl-card-title">Chrome</h3>
+            <p class="dl-card-desc">Install from Chrome WebStore.</p>
+            <a href="https://github.com/TharukRenuja/zing/releases" class="btn btn-primary" rel="noopener noreferrer">
+              <i class="fa-solid fa-puzzle-piece"></i>
+              Install
+            </a>
+          </div>
+          <div class="dl-card">
+            <div class="dl-card-icon"><i class="fa-brands fa-firefox-browser"></i></div>
+            <h3 class="dl-card-title">Firefox</h3>
+            <p class="dl-card-desc">Install from Firefox Add-ons.</p>
+            <a href="https://github.com/TharukRenuja/zing/releases" class="btn btn-primary" rel="noopener noreferrer">
+              <i class="fa-solid fa-puzzle-piece"></i>
+              Install
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
+
   <div class="divider"></div>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-label">Install from source</div>
+      <h2>Build it yourself</h2>
+      <p class="section-desc">zing is written in Rust. Clone the repo and build with cargo.</p>
+      <div class="build-terminal">
+        <div><span class="terminal-prompt">$ </span><span style="color:var(--text)">git clone https://github.com/TharukRenuja/zing.git</span></div>
+        <div><span class="terminal-prompt">$ </span><span style="color:var(--text)">cd zing</span></div>
+        <div><span class="terminal-prompt">$ </span><span style="color:var(--text)">cargo build --release</span></div>
+        <div><span class="terminal-prompt">$ </span><span style="color:var(--text)">cp target/release/zing /usr/local/bin/</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
   <section class="section">
     <div class="container">
       <div class="section-label">Changelog</div>
@@ -1002,7 +990,9 @@ cargo build --release</code></pre>
       </div>
     </div>
   </section>
+
   <div class="divider"></div>
+
   <section class="section">
     <div class="container">
       <div class="section-label">Older Versions</div>
@@ -1011,20 +1001,17 @@ cargo build --release</code></pre>
     </div>
   </section>
 </main>
+
+<!--FOOTER_START-->
 <footer>
-{footer_template}
+  <div class="container">
+    <p>{footer_template}</p>
+  </div>
 </footer>
-<script>
-(()=>{{
-  const t=document.getElementById('theme-toggle');if(!t)return;
-  const s=t.querySelector('.sun-icon'),m=t.querySelector('.moon-icon'),q=window.matchMedia('(prefers-color-scheme: light)');
-  function u(t){{t==='light'?(s.style.display='none',m.style.display='block'):(s.style.display='block',m.style.display='none')}}
-  function g(){{const s=localStorage.getItem('theme');return s||(q.matches?'light':'dark')}}
-  function a(t){{t==='system'?(document.documentElement.removeAttribute('data-theme'),u(q.matches?'light':'dark')):(document.documentElement.setAttribute('data-theme',t),u(t))}}
-  a(g());q.addEventListener('change',e=>{{if(!localStorage.getItem('theme'))a(e.matches?'light':'dark')}});
-  t.addEventListener('click',()=>{{const c=g(),n=c==='dark'?'light':'dark';localStorage.setItem('theme',n);a(n)}});
-}})();
-</script>
+<!--FOOTER_END-->
+
+<script src="/assets/js/docs.js"></script>
+<script src="/assets/js/theme.js"></script>
 </body>
 </html>'''
     with open(os.path.join(root, 'downloads.html'), 'w') as f:
@@ -1144,7 +1131,7 @@ if __name__ == '__main__':
   <link rel="icon" href="/assets/favicon.ico">
   <link rel="apple-touch-icon" href="/assets/favicon.ico">
   <link rel="stylesheet" href="/style.css">
-  <script>(function(){{const t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}})();</script>
+  <script src="/assets/js/theme-init.js"></script>
 </head>
 <body>
 {four04_nav}

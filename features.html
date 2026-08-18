@@ -14,12 +14,7 @@
   <link rel="stylesheet" href="/style.css">
   <link rel="icon" href="/assets/favicon.ico">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <script>
-    (function () {
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
-    })();
-  </script>
+  <script src="/assets/js/theme-init.js"></script>
 </head>
 <body>
 
@@ -44,7 +39,7 @@
           <li><a href="/downloads">Downloads</a></li>
           <li class="nav-docs"><a href="/docs/">Docs</a></li>
           <li class="nav-docs-icon"><a href="/docs/" title="Docs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></a></li>
-          <li><a href="https://github.com/TharukRenuja/zing" rel="noopener noreferrer" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></a></li>
+          <li><a href="https://github.com/TharukRenuja/zing" rel="noopener noreferrer" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a></li>
         </ul>
         <button class="theme-toggle" id="theme-toggle" title="Toggle theme">
           <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none">
@@ -259,136 +254,7 @@
   </footer>
 <!--FOOTER_END-->
 
-  <script>
-    (() => {
-      // Theme toggle
-      const themeToggle = document.getElementById('theme-toggle');
-      if (themeToggle) {
-        const sunIcon = themeToggle.querySelector('.sun-icon');
-        const moonIcon = themeToggle.querySelector('.moon-icon');
-        const mq = window.matchMedia('(prefers-color-scheme: light)');
-        function updateIcons(t) {
-          if (t === 'light') { sunIcon.style.display = 'none'; moonIcon.style.display = 'block'; }
-          else { sunIcon.style.display = 'block'; moonIcon.style.display = 'none'; }
-        }
-        function getTheme() { return localStorage.getItem('theme') || (mq.matches ? 'light' : 'dark'); }
-        function applyTheme(t) { document.documentElement.setAttribute('data-theme', t); updateIcons(t); }
-        applyTheme(getTheme());
-        mq.addEventListener('change', e => { if (!localStorage.getItem('theme')) applyTheme(e.matches ? 'light' : 'dark'); });
-        themeToggle.addEventListener('click', () => {
-          const next = getTheme() === 'dark' ? 'light' : 'dark';
-          localStorage.setItem('theme', next); applyTheme(next);
-        });
-      }
-
-      // Screenshot carousels (GUI + Extension)
-      let hoveredCarousel = null;
-      document.querySelectorAll('.ext-carousel').forEach(carousel => {
-        const inner = carousel.querySelector('.ext-carousel-inner');
-        const items = carousel.querySelectorAll('.ext-carousel-item');
-        const dotsWrap = carousel.querySelector('.ext-carousel-dots');
-        const btns = carousel.querySelectorAll('.ext-carousel-btn');
-        const total = items.length;
-        let current = 0;
-        let programmatic = false;
-
-        // Build dots
-        items.forEach((_, i) => {
-          const dot = document.createElement('div');
-          dot.className = 'ext-carousel-dot' + (i === 0 ? ' active' : '');
-          dot.addEventListener('click', () => goTo(i));
-          dotsWrap.appendChild(dot);
-        });
-
-        const dots = dotsWrap.querySelectorAll('.ext-carousel-dot');
-
-        function updateDots(idx) {
-          dots.forEach((d, i) => d.classList.toggle('active', i === idx));
-        }
-
-        function goTo(idx) {
-          if (total === 0) return;
-          current = ((idx % total) + total) % total;
-          programmatic = true;
-          updateDots(current);
-          inner.scrollTo({ left: items[current].offsetLeft - (inner.clientWidth - items[current].offsetWidth) / 2, behavior: 'smooth' });
-          setTimeout(() => { programmatic = false; }, 400);
-        }
-
-        btns.forEach(btn => {
-          btn.addEventListener('click', () => {
-            const dir = parseInt(btn.dataset.dir);
-            goTo(current + dir);
-          });
-        });
-
-        // Track hover for arrow key scope
-        carousel.addEventListener('mouseenter', () => { hoveredCarousel = carousel; });
-        carousel.addEventListener('mouseleave', () => { if (hoveredCarousel === carousel) hoveredCarousel = null; });
-
-        // Update dots on manual scroll only
-        inner.addEventListener('scroll', () => {
-          if (programmatic) return;
-          const scrollLeft = inner.scrollLeft;
-          const mid = scrollLeft + inner.clientWidth / 2;
-          let closest = 0, closestDist = Infinity;
-          items.forEach((item, i) => {
-            const dist = Math.abs((item.offsetLeft + item.offsetWidth / 2) - mid);
-            if (dist < closestDist) { closestDist = dist; closest = i; }
-          });
-          if (closest !== current) {
-            current = closest;
-            updateDots(current);
-          }
-        });
-      });
-
-      // Arrow key navigation — scoped to hovered carousel
-      document.addEventListener('keydown', e => {
-        if (!hoveredCarousel) return;
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-          e.preventDefault();
-          const inner = hoveredCarousel.querySelector('.ext-carousel-inner');
-          const items = hoveredCarousel.querySelectorAll('.ext-carousel-item');
-          const dots = hoveredCarousel.querySelectorAll('.ext-carousel-dot');
-          const total = items.length;
-          const scrollLeft = inner.scrollLeft;
-          const mid = scrollLeft + inner.clientWidth / 2;
-          let current = 0, closestDist = Infinity;
-          items.forEach((item, i) => {
-            const dist = Math.abs((item.offsetLeft + item.offsetWidth / 2) - mid);
-            if (dist < closestDist) { closestDist = dist; current = i; }
-          });
-          const dir = e.key === 'ArrowLeft' ? -1 : 1;
-          const next = ((current + dir) % total + total) % total;
-          inner.scrollTo({ left: items[next].offsetLeft - (inner.clientWidth - items[next].offsetWidth) / 2, behavior: 'smooth' });
-          dots.forEach((d, i) => d.classList.toggle('active', i === next));
-        }
-      });
-
-      // Capture wheel on hovered carousel → scroll images instead of page
-      document.addEventListener('wheel', e => {
-        const target = e.target.closest('.ext-carousel');
-        if (!target) return;
-        e.preventDefault();
-        const inner = target.querySelector('.ext-carousel-inner');
-        const items = target.querySelectorAll('.ext-carousel-item');
-        const dots = target.querySelectorAll('.ext-carousel-dot');
-        const total = items.length;
-        if (total === 0) return;
-        const scrollLeft = inner.scrollLeft;
-        const mid = scrollLeft + inner.clientWidth / 2;
-        let current = 0, closestDist = Infinity;
-        items.forEach((item, i) => {
-          const dist = Math.abs((item.offsetLeft + item.offsetWidth / 2) - mid);
-          if (dist < closestDist) { closestDist = dist; current = i; }
-        });
-        const dir = e.deltaY > 0 ? 1 : -1;
-        const next = ((current + dir) % total + total) % total;
-        inner.scrollTo({ left: items[next].offsetLeft - (inner.clientWidth - items[next].offsetWidth) / 2, behavior: 'smooth' });
-        dots.forEach((d, i) => d.classList.toggle('active', i === next));
-      }, { passive: false });
-    })();
-  </script>
+  <script src="/assets/js/theme.js"></script>
+  <script src="/assets/js/carousel.js"></script>
 </body>
 </html>

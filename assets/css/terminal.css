@@ -1,0 +1,145 @@
+/* ── TERMINAL ── */
+.terminal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+}
+.terminal-bar {
+  background: var(--bg-elevated);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.terminal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.terminal-dot-r { background: #ff5f57; }
+.terminal-dot-y { background: #febc2e; }
+.terminal-dot-g { background: #28c840; }
+.terminal-title {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin: 0 0 0 16rem;
+}
+.terminal-body {
+  padding: 1.25rem;
+  line-height: 1.8;
+  min-height: 280px;
+}
+.t-prompt { color: var(--accent); }
+.t-white { color: var(--text); }
+.t-dim { color: var(--muted); }
+.t-green { color: var(--green); }
+.t-yellow { color: var(--yellow); }
+.t-blue { color: var(--accent-light); }
+.t-red { color: var(--red); }
+
+.terminal-body > div {
+  opacity: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  clip-path: inset(0 100% 0 0);
+  transition:
+    opacity 40ms linear,
+    clip-path 200ms ease-out;
+}
+.terminal-body > div.is-visible {
+  opacity: 1;
+  clip-path: inset(0 0 0 0);
+}
+.terminal-body > .terminal-gap {
+  min-height: 1.2em;
+}
+.terminal-body.terminal-reset > div {
+  transition: none;
+}
+
+/* ── TUI REPLICA ── */
+.tui-body {
+  padding: 0.5rem 0.75rem;
+  line-height: 1;
+  min-height: 280px;
+  white-space: pre;
+  font-size: 0.65rem;
+  overflow-x: auto;
+}
+.tui-body .tui-line {
+  white-space: pre;
+  overflow: hidden;
+}
+.tui-title {
+  margin-bottom: 0.15rem;
+}
+.tui-file {
+  margin-bottom: 0.1rem;
+}
+.tui-logo {
+  float: right;
+  font-weight: 700;
+}
+.tui-progress-bar-row {
+  margin-bottom: 0.3rem;
+}
+.tui-bar {
+  display: inline-block;
+  width: 60ch;
+  height: 1em;
+  background: linear-gradient(90deg, var(--green) 0%, var(--green) var(--bar-fill, 0%), #2a2a3e var(--bar-fill, 0%), #2a2a3e 100%);
+  border-radius: 2px;
+  vertical-align: middle;
+  margin-right: 0.2rem;
+  transition: width 0.1s linear;
+}
+.tui-pct {
+  font-weight: 600;
+}
+.tui-section-header {
+  margin-top: 0.35rem;
+  border-top: 1px solid #2a2a3e;
+  padding-top: 0.25rem;
+}
+.tui-section-header .t-dim {
+  font-weight: 600;
+}
+.tui-stats {
+  line-height: 1.4;
+}
+.tui-table-header {
+  color: var(--muted);
+  font-weight: 600;
+}
+.tui-table-row {
+  line-height: 1.4;
+}
+.tui-keybar {
+  margin-top: 0.5rem;
+  border-top: 1px solid #2a2a3e;
+  padding-top: 0.35rem;
+}
+.tui-key {
+  color: var(--green);
+  font-weight: 700;
+}
+
+/* ── TUI ANIMATION ── */
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.tui-cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  background: var(--text);
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+  margin-left: 1px;
+}
+[data-tui] {
+  transition: color 0.25s;
+}

@@ -1,0 +1,264 @@
+/* ── DOWNLOADS PAGE ── */
+.download-hero {
+  padding: 6rem 1.5rem 4rem;
+  text-align: center;
+}
+.download-hero h1 {
+  font-family: var(--mono);
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.03em;
+  margin-bottom: 0.5rem;
+}
+.download-hero .section-desc {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+.dl-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  max-width: 960px;
+  margin: 0 auto 2rem;
+  align-items: start;
+}
+.dl-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: border-color 0.15s, transform 0.15s;
+  position: relative;
+}
+
+.dl-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+}
+.dl-card-icon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+}
+.dl-card-icon svg {
+  width: 32px;
+  height: 32px;
+  stroke-width: 1.5;
+}
+.dl-card-title {
+  font-family: var(--mono);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+.dl-card-desc {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+}
+.dl-card .btn { width: 15rem; justify-content: center; }
+.dl-dropdown-trigger { width: auto; }
+
+/* ── CHANGELOG ── */
+.changelog-wrap { position: relative; }
+.changelog {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem 2rem;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--muted);
+  max-height: 200px;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.changelog.expanded { max-height: none; }
+.changelog-toggle {
+  display: block;
+  margin: 0.75rem auto 0;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.changelog-toggle:hover { color: var(--text); border-color: var(--border-hover); }
+.changelog h2, .changelog h3 {
+  font-family: var(--mono);
+  color: var(--text);
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+.changelog h2:first-child, .changelog h3:first-child { margin-top: 0; }
+.changelog ul { padding-left: 1.5rem; }
+.changelog li { margin-bottom: 0.3rem; }
+.changelog code {
+  background: var(--bg-elevated);
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  font-size: 0.8rem;
+}
+.changelog a { color: var(--accent); }
+
+/* ── FEATURES PAGE ── */
+.feature-detail {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2rem;
+  padding: 2.5rem 0;
+  border-bottom: 1px solid var(--border);
+  align-items: start;
+}
+.feature-detail:last-child { border-bottom: none; }
+.feature-detail > :last-child { min-width: 0; }
+.feature-detail-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  flex-shrink: 0;
+}
+.feature-detail-icon svg { width: 22px; height: 22px; stroke-width: 1.5; }
+.feature-detail h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+.feature-detail p {
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 0.75rem;
+}
+.feature-detail ul {
+  list-style: none;
+  padding: 0;
+}
+.feature-detail li {
+  font-size: 0.875rem;
+  color: var(--muted);
+  padding: 0.2rem 0;
+  padding-left: 1.25rem;
+  position: relative;
+}
+.feature-detail li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.6rem;
+  width: 5px;
+  height: 5px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+/* ── OLDER VERSIONS DOWNLOAD LINKS ── */
+.dl-header {
+  text-align: center;
+}
+.dl-cell {
+  vertical-align: middle;
+}
+
+.dl-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.dl-links .dl-secondary {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.78rem;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
+.dl-links .dl-secondary i {
+  margin-right: 0.25rem;
+  font-size: 0.72rem;
+}
+
+.dl-links .dl-info {
+  border-style: dashed;
+}
+
+td:last-child {
+  width: 1%;
+  white-space: nowrap;
+}
+
+/* ── DOWNLOAD CARD DROPDOWN ── */
+.dl-dropdown {
+  position: relative;
+}
+.dl-dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  width: 100%;
+}
+.dl-chevron {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.2s ease;
+}
+.dl-dropdown:hover .dl-chevron {
+  transform: rotate(180deg);
+}
+.dl-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.3rem;
+  min-width: 180px;
+  z-index: 10;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(-4px);
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+}
+.dl-dropdown:hover .dl-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+.dl-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.82rem;
+  color: var(--text);
+  border-radius: 5px;
+  white-space: nowrap;
+  transition: background 0.1s;
+  width: 15rem;
+}
+.dl-dropdown-item:hover {
+  background: var(--bg-elevated);
+}
+.dl-dropdown-item i {
+  font-size: 0.75rem;
+  color: var(--muted);
+}

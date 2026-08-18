@@ -1,0 +1,51 @@
+/* ════════════════════════════════════════════════════════════════════
+   EXTENSION SIDE-BY-SIDE
+   ════════════════════════════════════════════════════════════════════ */
+.ext-side-by-side {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  margin-top: 0;
+}
+.ext-side-by-side > .ext-text { flex: 0 0 60%; min-width: 0; }
+.ext-side-by-side > .ext-carousel { flex: 0 0 calc(40% - 2rem); margin-top: -3rem; overflow: hidden; }
+.ext-side-by-side .ext-carousel-inner { gap: 0; padding: 0; overflow-x: hidden; }
+.ext-side-by-side .ext-carousel-item { min-width: 100%; line-height: 0; }
+.ext-side-by-side .ext-carousel-item img { height: auto; max-height: 500px; width: 100%; display: block; border: 1px solid var(--border); border-radius: 8px; background: none; }
+.ext-ss-scroll {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+  padding-bottom: 4px;
+}
+.ext-ss-scroll::-webkit-scrollbar { height: 6px; }
+.ext-ss-scroll::-webkit-scrollbar-track { background: transparent; }
+.ext-ss-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+.ext-ss-scroll img {
+  flex: 0 0 220px;
+  scroll-snap-align: start;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  height: auto;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   EXTENSION DOWNLOADS (downloads page)
+   ════════════════════════════════════════════════════════════════════ */
+.ext-downloads {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 3rem;
+  align-items: flex-start;
+  margin-top: 1.5rem;
+}
+.ext-downloads-info { min-width: 0; }
+.ext-downloads-cards {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin-top: -7rem;
+}
