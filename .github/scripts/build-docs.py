@@ -425,6 +425,8 @@ def make_page(title, body, slug, nav_template, footer_template, pages, is_index=
   <meta property="og:description" content="{desc}">
   <meta property="og:url" content="https://zing.tharuk.pro/docs/{slug}.html">
   <meta property="og:type" content="website">
+  <meta property="og:image" content="https://i.ibb.co/f7LsBcy/zing-poster.png" />
+  <meta name="twitter:image" content="https://i.ibb.co/f7LsBcy/zing-poster.png" />
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{title} - zing Docs">
   <meta name="twitter:description" content="{desc}">
@@ -836,6 +838,8 @@ def build_downloads_page(root, nav_template, footer_template):
   <meta property="og:description" content="Download zing for Linux, macOS, and Windows.">
   <meta property="og:url" content="https://zing.tharuk.pro/downloads">
   <meta property="og:type" content="website">
+  <meta property="og:image" content="https://i.ibb.co/f7LsBcy/zing-poster.png" />
+  <meta name="twitter:image" content="https://i.ibb.co/f7LsBcy/zing-poster.png" />
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Downloads - zing">
   <meta name="twitter:description" content="Download zing for Linux, macOS, and Windows.">
@@ -1121,6 +1125,8 @@ if __name__ == '__main__':
   <meta property="og:description" content="Page not found">
   <meta property="og:url" content="https://zing.tharuk.pro/404.html">
   <meta property="og:type" content="website">
+  <meta property="og:image" content="https://i.ibb.co/f7LsBcy/zing-poster.png" />
+  <meta name="twitter:image" content="https://i.ibb.co/f7LsBcy/zing-poster.png" />
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="404 - zing">
   <meta name="twitter:description" content="Page not found">
